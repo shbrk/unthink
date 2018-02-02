@@ -1,0 +1,26 @@
+{
+    "DBObject": { // 所有入库对象应该继承此类 
+        "uuid":"string"
+    },
+    "Item": { // 玩家物品
+        "cid": "int",
+        "count": "int",
+        "sale": "float", //折扣
+        "num":"int64",
+        "price":"double",
+        "prob":"object"
+    },
+    "UserInfo": {
+        "__extends": "DBObject",// 继承了DBObject 将会生成UserInfo表
+        "name": "string", // 玩家姓名
+        "level": "array<int>",
+        "bag": "array<array<Item>>",
+        "usingItem": "Item",
+        "custom":"object",
+        "info": { // 自定义格式
+            "__type": "string",
+            "__dbType": "text",
+            "__default": "abc"
+        }
+    }
+}

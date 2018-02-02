@@ -1,0 +1,6 @@
+# ignore dir
+/dist
+/output
+/node_modules
+/.vscode
+

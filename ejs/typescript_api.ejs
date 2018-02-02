@@ -1,0 +1,30 @@
+/**
+ *  MADE BY GENERATOR AT <%-time%>,
+ *  PLEASE DO NOT REWRITE.
+ **/
+ 
+import * as SS from "./sharedStruct";
+import * as SE from "./sharedEnum";
+
+<%_ for (let [mod,list] of apis.entries()) { _%>
+export namespace <%-mod%> {
+
+    <%_ for(let node of list) { _%>
+    export class <%-node.name%>Request { <%-node.req.comment%> 
+        <%_ for(let v of node.req.args) {_%>
+        <%-v.name%>: <%-v.type%> = <%-v.value%>; <%-v.comment%>
+        <%_}_%>
+    }
+
+    export class <%-node.name%>Response { <%-node.res.comment%> 
+        <%_ for(let v of node.res.args) {_%>
+        <%-v.name%>: <%-v.type%> = <%-v.value%>; <%-v.comment%>
+        <%_}_%>
+    } 
+    
+    <%_}_%>
+}
+
+<%_}_%>
+        
+        

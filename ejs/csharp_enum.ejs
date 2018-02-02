@@ -1,0 +1,24 @@
+/**
+ *  MADE BY GENERATOR AT <%-time%>,
+ *  PLEASE DO NOT REWRITE.
+ **/
+
+<%_ for(let node of enums) {_%>
+public enum <%-node.name%> <%-node.comment%>
+{
+  <%_ for(let v of node.mems) {_%>
+    <%-v.name%> = <%-v.value%>, <%-v.comment%>
+  <%_}_%>
+}
+
+<%_}_%>
+<%_ for(let node of enums_mix) {_%>
+public class <%-node.name%> <%-node.comment%>
+{
+  <%_ for(let v of node.mems) {_%>
+    public static <%-v.type%> <%-v.name%> = <%-v.value%>; <%-v.comment%>
+  <%_}_%>
+}
+
+<%_}_%>
+

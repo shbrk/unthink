@@ -1,0 +1,17 @@
+/**
+ *  MADE BY GENERATOR AT <%-time%>,
+ *  PLEASE DO NOT REWRITE.
+ **/
+
+using System.Collections.Generic;
+
+ <%_ for(let node of structs) {_%>
+public class <%-node.name%> <%-node.base%> <%-node.comment%>
+{
+  <%_ for(let v of node.mems) {_%>
+    public <%-v.type%> <%-v.name%> = <%-v.value%>; <%-v.comment%>
+  <%_}_%>
+}
+
+<%_}%>
+
