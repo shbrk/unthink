@@ -1,5 +1,19 @@
+安装
+==
+> `npm install unthink -g`
 
-协议生成器介绍
+初始化
+==
+> 选择任意目录 执行 `unthink init` ，会在当前目录生成协议描述文件模板。
+
+生成目标代码
+==
+> 修改`config.json` 配置文件中的`out`属性，指定代码生成路径。
+> 运行 `unthink run` 命令 或者直接双击 `start.cmd` 执行代码生成。
+
+
+
+协议生成器介绍。
 ==
 > 包含`enum.json` `struct.json` `api.json` 三个描述文件
 
