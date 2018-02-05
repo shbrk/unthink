@@ -71,7 +71,7 @@ export enum ECommon
 
 struct.json
 ===
->前后端通用的数据结构，支持单继承。类型提供 `int` `float` `string` `array`  `object` 声明继承特定基类 `__DBOBJECT`的数据类型，会自动创建数据库结构，生成sql文件。数据库相关生成和其他功能是解耦的。
+>前后端通用的数据结构，支持单继承。类型提供 `int` `float` `string` `array`  `object` 声明继承特定基类 `DBOBJECT`的数据类型，会自动创建数据库结构，生成sql文件。数据库相关生成和其他功能是解耦的。
 >源码：
 ``` js
 {
@@ -82,15 +82,15 @@ struct.json
         "count": "int"
     },
     "UserInfo": {
-        "__extend": "DBOBJECT",
+        "<extend>": "DBOBJECT",
         "name": "string", // 玩家姓名
         "level": "int",
         "items": "Array<Item>",
         "luck": "float",
         "info": { // 自定义格式
-            "__type": "string",
-            "__dbType": "text",
-            "__default": "abc"
+            "<type>": "string",
+            "<dbType>": "text",
+            "<default>": "abc"
         }
     }
 }
@@ -100,7 +100,7 @@ struct.json
 > 生成c#代码
 ```csharp
     [Serializable]
-    public class __DBOBJECT
+    public class DBOBJECT
     {
     }
     [Serializable]
@@ -110,7 +110,7 @@ struct.json
         public int count;
     }
     [Serializable]
-    public class UserInfo : __DBOBJECT
+    public class UserInfo : DBOBJECT
     {
         public string name;
         public int level;
@@ -121,13 +121,13 @@ struct.json
 ```
 > 生成ts代码
 ```typescript
-export class __DBOBJECT {
+export class DBOBJECT {
 }
 export class Item {
     cid:number;
     cid:count;
 }
-export class UserInfo extends __DBOBJECT {
+export class UserInfo extends DBOBJECT {
     name:string;
     level:number;
     items:Array<Item> items;
@@ -154,11 +154,11 @@ api.json
 {
     "System": { // 模块
         "Login": { // 玩家登陆
-            "__req": { // 请求登陆
+            "<req>": { // 请求登陆
                 "name": "string",
                 "pwd": "string"
             },
-            "__res": {
+            "<res>": {
                 "usr": "UserInfo",
                 "error":"EError"
             }

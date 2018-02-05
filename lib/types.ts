@@ -20,12 +20,12 @@ export enum ETYPE {
 };
 
 export enum KEYWORD {
-    TYPE = "__type",
-    DEFAULT = "__default",
-    DBTYPE = "__dbtype",
-    EXTENDS = "__extends",
-    REQ = "__req",
-    RES = "__res"
+    TYPE = "<type>",
+    DEFAULT = "<default>",
+    DBTYPE = "<dbtype>",
+    EXTENDS = "<extends>",
+    REQ = "<req>",
+    RES = "<res>"
 }
 
 
@@ -130,14 +130,16 @@ export function getExtend(obj: any) {
     return null;
 }
 
-export function getReqOrThrow(obj: any, mod: string, name: string) {
+export function getReqOrThrow(obj: any, mod: string, name: string, throwable: boolean = true) {
     if (obj[KEYWORD.REQ])
         return obj[KEYWORD.REQ];
+    if (!throwable) return null;
     throw new Error(`${mod}.${name} api need a req define`);
 }
 
-export function getResOrThrow(obj: any, mod: string, name: string) {
+export function getResOrThrow(obj: any, mod: string, name: string, throwable: boolean = true) {
     if (obj[KEYWORD.RES])
         return obj[KEYWORD.RES];
+    if (!throwable) return null;
     throw new Error(`${mod}.${name} api need a res define`);
 }

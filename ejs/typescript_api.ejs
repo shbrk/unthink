@@ -10,17 +10,19 @@ import * as SE from "./SharedEnum";
 export namespace <%-mod%> {
 
     <%_ for(let node of list) { _%>
+    <%_ if(node.req) { _%>
     export class <%-node.name%>Request { <%-node.req.comment%> 
         <%_ for(let v of node.req.args) {_%>
         <%-v.name%>: <%-v.type%> = <%-v.value%>; <%-v.comment%>
         <%_}_%>
-    }
+    } <%_}_%>
 
+    <%_ if(node.res) { _%>
     export class <%-node.name%>Response { <%-node.res.comment%> 
         <%_ for(let v of node.res.args) {_%>
         <%-v.name%>: <%-v.type%> = <%-v.value%>; <%-v.comment%>
         <%_}_%>
-    } 
+    }  <%_}_%>
     
     <%_}_%>
 }

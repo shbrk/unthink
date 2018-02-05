@@ -1,29 +1,29 @@
 {
     "System": { // 模块
         "Login": { // 玩家登陆
-            "__req": { // 请求登陆
+            "<req>": { // 请求登陆
                 "name": "string",
                 "pwd": "string"
             },
-            "__res": {
+            "<res>": {
                 "usr": "UserInfo", // 玩家信息
                 "error": "EError" //错误类型
             }
         },
         "Logout": {
-            "__req": {},
-            "__res": {
+            "<req>": {},
+            "<res>": {
                 "error": "EError"
             }
         }
     },
     "Test": { // 测试模块
         "Echo": { // 回显
-            "__req": {
+            "<req>": {
                 "msg": "string", // 回显消息
                 "time": "int" //时间戳
             },
-            "__res": {
+            "<res>": {
                 "msg": "string", //客户端发来的消息
                 "time": "int" //客户端发来的时间戳
             }

@@ -10,8 +10,14 @@ const resPath = relativePath == 'dist' ? './res/' : process.cwd(); // 判断是�
 const curPath = path.join(__dirname, '../');
 
 const config = requireJsonNoComment(path.join(resPath, 'config.json'));
-function createAST() {
-    let ast = new AST();
+
+config.out = config.out || [];
+config.request_required = config.request_required || false;
+config.response_required = config.response_required || false;
+
+
+function createAST(config: any) {
+    let ast = new AST(config);
     ast.addEnum(path.join(resPath, 'common/enum.json'));
     ast.addEnum(path.join(resPath, 'server_only/enum.json'));
     ast.addEnum(path.join(resPath, 'client_only/enum.json'));
@@ -58,7 +64,7 @@ function mkdir(dirpath: string) {
 
 
 
-let ast = createAST();
+let ast = createAST(config);
 output(ast, config.out);
 console.log('done!');
 

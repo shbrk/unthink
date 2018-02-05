@@ -75,6 +75,9 @@ export default class Parser {
 
     parseAPI(apiJsonList: any, apiMap: Map<string, APINode>, tag = OUTTAG.common) {
 
+        let reqThrowable = this.ast.config.request_required;
+        let resThrowable = this.ast.config.response_required;
+
         for (const apiModName in apiJsonList) {
             if (json.isComment(apiModName)) continue;
             if (types.isKeyWord(apiModName)) continue;
@@ -84,46 +87,48 @@ export default class Parser {
                 if (json.isComment(apiName)) continue;
                 if (types.isKeyWord(apiName)) continue;
                 const apiData = apiModData[apiName];
-                const reqData = types.getReqOrThrow(apiData, apiModName, apiName);
-                const resData = types.getResOrThrow(apiData, apiModName, apiName);
+                const reqData = types.getReqOrThrow(apiData, apiModName, apiName, reqThrowable);
+                const resData = types.getResOrThrow(apiData, apiModName, apiName, resThrowable);
 
                 let an = new APINode();
-                an.req = new ReqNode();
-                an.res = new ResNode();
-
                 an.name = apiName;
                 an.mod = apiModName;
                 an.comment = json.getComment(apiName, apiModData);
 
-                an.req.comment = json.getComment(types.KEYWORD.REQ, apiData);
-                an.res.comment = json.getComment(types.KEYWORD.RES, apiData);
-
-                an.req.args = new Array<VarNode>();
-                for (const argName in reqData) {
-                    if (json.isComment(argName)) continue;
-                    if (types.isKeyWord(argName)) continue;
-                    let vn = new VarNode();
-                    let val = reqData[argName];
-                    vn.name = argName;
-                    vn.comment = json.getComment(argName, reqData);
-                    vn.type = types.getTypeByDescOrThrow(val);
-                    vn.subtype = types.getSubTypeByDescOrThrow(val);
-                    vn.value = types.getDefaultValByType(vn.type, val);
-                    an.req.args.push(vn);
+                if (reqData) {
+                    an.req = new ReqNode();
+                    an.req.comment = json.getComment(types.KEYWORD.REQ, apiData);
+                    an.req.args = new Array<VarNode>();
+                    for (const argName in reqData) {
+                        if (json.isComment(argName)) continue;
+                        if (types.isKeyWord(argName)) continue;
+                        let vn = new VarNode();
+                        let val = reqData[argName];
+                        vn.name = argName;
+                        vn.comment = json.getComment(argName, reqData);
+                        vn.type = types.getTypeByDescOrThrow(val);
+                        vn.subtype = types.getSubTypeByDescOrThrow(val);
+                        vn.value = types.getDefaultValByType(vn.type, val);
+                        an.req.args.push(vn);
+                    }
                 }
 
-                an.res.args = new Array<VarNode>();
-                for (const argName in resData) {
-                    if (json.isComment(argName)) continue;
-                    if (types.isKeyWord(argName)) continue;
-                    let vn = new VarNode();
-                    let val = resData[argName];
-                    vn.name = argName;
-                    vn.comment = json.getComment(argName, resData);
-                    vn.type = types.getTypeByDescOrThrow(val);
-                    vn.subtype = types.getSubTypeByDescOrThrow(val);
-                    vn.value = types.getDefaultValByType(vn.type, val);
-                    an.res.args.push(vn);
+                if (resData) {
+                    an.res = new ResNode();
+                    an.res.comment = json.getComment(types.KEYWORD.RES, apiData);
+                    an.res.args = new Array<VarNode>();
+                    for (const argName in resData) {
+                        if (json.isComment(argName)) continue;
+                        if (types.isKeyWord(argName)) continue;
+                        let vn = new VarNode();
+                        let val = resData[argName];
+                        vn.name = argName;
+                        vn.comment = json.getComment(argName, resData);
+                        vn.type = types.getTypeByDescOrThrow(val);
+                        vn.subtype = types.getSubTypeByDescOrThrow(val);
+                        vn.value = types.getDefaultValByType(vn.type, val);
+                        an.res.args.push(vn);
+                    }
                 }
 
                 let apiCompleteName = `${apiModName}.${apiName}`;

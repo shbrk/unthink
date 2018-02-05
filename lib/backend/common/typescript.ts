@@ -10,7 +10,7 @@ typeTable[ETYPE.BOOL] = 'boolean';
 typeTable[ETYPE.DOUBLE] = 'number';
 typeTable[ETYPE.FLOAT] = 'number';
 typeTable[ETYPE.INT] = 'number';
-typeTable[ETYPE.INT64] = 'long';
+typeTable[ETYPE.INT64] = 'number';
 typeTable[ETYPE.OBJECT] = 'object';
 typeTable[ETYPE.STRING] = 'string';
 

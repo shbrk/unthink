@@ -103,34 +103,42 @@ export default class BaseOutput {
             let node: any = {};
             node.name = an.name;
             node.comment = this.parseComment(an.comment);
-            node.req = {};
-            node.req.comment = this.parseComment(an.req.comment);
-            node.req.args = [];
-            node.reqArgs = '';
-            for (let vn of an.req.args) {
-                let [t, val] = this.parseVar(vn, FILETAG.API);
-                let v: any = {};
-                v.name = vn.name;
-                v.type = t;
-                v.value = val;
-                v.comment = this.parseComment(vn.comment);
-                node.req.args.push(v);
-                node.reqArgs = `${node.reqArgs}, ${v.type} ${v.name}`;
+            if (an.req) {
+                node.req = {};
+                node.req.comment = this.parseComment(an.req.comment);
+                node.req.args = [];
+                node.reqArgs = '';
+                for (let vn of an.req.args) {
+                    let [t, val] = this.parseVar(vn, FILETAG.API);
+                    let v: any = {};
+                    v.name = vn.name;
+                    v.type = t;
+                    v.value = val;
+                    v.comment = this.parseComment(vn.comment);
+                    node.req.args.push(v);
+                    node.reqArgs = `${node.reqArgs}, ${v.type} ${v.name}`;
+                }
+                if (node.reqArgs.length > 2) node.reqArgs = node.reqArgs.substr(2);
             }
-            if (node.reqArgs.length > 2) node.reqArgs = node.reqArgs.substr(2);
 
-            node.res = {};
-            node.res.comment = this.parseComment(an.res.comment);
-            node.res.args = [];
-            for (let vn of an.res.args) {
-                let [t, val] = this.parseVar(vn);
-                let v: any = {};
-                v.name = vn.name;
-                v.type = t;
-                v.value = val;
-                v.comment = this.parseComment(vn.comment);
-                node.res.args.push(v);
+            if (an.res) {
+                node.res = {};
+                node.res.comment = this.parseComment(an.res.comment);
+                node.res.args = [];
+                node.resArgs = '';
+                for (let vn of an.res.args) {
+                    let [t, val] = this.parseVar(vn, FILETAG.API);
+                    let v: any = {};
+                    v.name = vn.name;
+                    v.type = t;
+                    v.value = val;
+                    v.comment = this.parseComment(vn.comment);
+                    node.res.args.push(v);
+                    node.resArgs = `${node.resArgs}, ${v.type} ${v.name}`;
+                }
+                if (node.resArgs.length > 2) node.resArgs = node.resArgs.substr(2);
             }
+
             list.push(node);
         }
         this.render(fileName, ejsName, data);

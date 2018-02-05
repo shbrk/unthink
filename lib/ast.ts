@@ -28,8 +28,10 @@ export default class AST {
 
     parser: Parser;
     checker: TypeChecker;
+    config: any;
 
-    constructor() {
+    constructor(config: any) {
+        this.config = config;
         this.parser = new Parser(this);
         this.checker = new TypeChecker(this);
     }

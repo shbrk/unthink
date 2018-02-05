@@ -7,22 +7,25 @@ using System.Collections.Generic;
 
 <%_ for (let [mod,list] of apis.entries()) { _%>
 public class <%-mod%>Pxy {
-
+    
     <%_ for(let node of list) { _%>
+    <%_ if(node.req) { _%>
     public class <%-node.name%>Request <%-node.req.comment%> 
     {
         <%_ for(let v of node.req.args) {_%>
         public <%-v.type%> <%-v.name%> = <%-v.value%>; <%-v.comment%>
         <%_}_%>
-    }
+    } <%_}_%>
 
+    <%_ if(node.res) {_%>
     public class <%-node.name%>Response <%-node.res.comment%> 
     {
         <%_ for(let v of node.res.args) {_%>
         public <%-v.type%> <%-v.name%> = <%-v.value%>; <%-v.comment%>
         <%_}_%>
-    }
+    } <%_}_%>
 
+    <%_ if(node.req && node.res) {_%>
     public static ServerResponse<<%-node.name%>Response> <%-node.name%>(<%-node.reqArgs%>)
     {
         var url = ServerContext.UrlPathJoin("<%-mod%>", "<%-node.name%>");
@@ -33,7 +36,7 @@ public class <%-mod%>Pxy {
             <%_}_%>
         };
         return new ServerResponse<<%-node.name%>Response>(url, req);
-    } 
+    } <%_}_%> 
 
     <%_}_%>
 }
