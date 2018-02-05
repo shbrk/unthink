@@ -60,4 +60,5 @@ function mkdir(dirpath: string) {
 
 let ast = createAST();
 output(ast, config.out);
+console.log('done!');
 
