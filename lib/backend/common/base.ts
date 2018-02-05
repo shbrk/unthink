@@ -2,7 +2,7 @@ import * as ejs from 'ejs';
 import * as path from 'path';
 import * as fs from 'fs';
 import AST from '../../ast';
-import { EnumNode, StructNode, VarNode, OUTTAG, APINode } from '../../astnode';
+import { EnumNode, StructNode, VarNode, OUTTAG, APINode, FILETAG } from '../../astnode';
 
 
 export default class BaseOutput {
@@ -27,7 +27,7 @@ export default class BaseOutput {
         return base ? ` extends ${base}` : '';
     }
 
-    parseVar(vn: VarNode) {
+    parseVar(vn: VarNode, ft: FILETAG) {
         return [vn.type, vn.value];
     }
 
@@ -44,7 +44,7 @@ export default class BaseOutput {
             node.comment = this.parseComment(en.comment);
             node.mems = [];
             for (let vn of en.members) {
-                let [t, val] = this.parseVar(vn);
+                let [t, val] = this.parseVar(vn, FILETAG.Enum);
                 let v: any = {};
                 v.name = vn.name;
                 v.type = t;
@@ -74,7 +74,7 @@ export default class BaseOutput {
             node.mems = [];
             node.base = this.parseExtends(sn.base);
             for (let vn of sn.members) {
-                let [t, val] = this.parseVar(vn);
+                let [t, val] = this.parseVar(vn, FILETAG.Struct);
                 let v: any = {};
                 v.name = vn.name;
                 v.type = t;
@@ -108,7 +108,7 @@ export default class BaseOutput {
             node.req.args = [];
             node.reqArgs = '';
             for (let vn of an.req.args) {
-                let [t, val] = this.parseVar(vn);
+                let [t, val] = this.parseVar(vn, FILETAG.API);
                 let v: any = {};
                 v.name = vn.name;
                 v.type = t;

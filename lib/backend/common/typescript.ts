@@ -2,7 +2,7 @@ import AST from "../../ast";
 import BaseOutput from "./base";
 import { ETYPE } from "../../types";
 import { format } from "util";
-import { VarNode, OUTTAG } from "../../astnode";
+import { VarNode, OUTTAG, FILETAG } from "../../astnode";
 
 let typeTable: any = {};
 typeTable[ETYPE.ARRAY] = 'Array<%s>';
@@ -32,16 +32,16 @@ export default class TypeScriptOutput extends BaseOutput {
         super(ast, outPath, ejsPath);
     }
 
-    getType(t: string, subt: string[]) {
+    getType(t: string, subt: string[], ft: FILETAG) {
         if (t == ETYPE.ARRAY) {
             let tmp = ([t] as string[]).concat(subt);
             let item = tmp[tmp.length - 1];
 
             if (this.ast.findTypeEnum(item)) {
-                item = `SE.${item}`;
+                item = ft == FILETAG.Enum ? item : `SE.${item}`;
             }
             else if (this.ast.findTypeStruct(item)) {
-                item = `SS.${item}`;
+                item = ft == FILETAG.Struct ? item : `SS.${item}`;
             }
             else if (typeTable[item]) {
                 item = typeTable[item];
@@ -74,16 +74,16 @@ export default class TypeScriptOutput extends BaseOutput {
     }
 
 
-    parseVar(vn: VarNode) {
-        let t = this.getType(vn.type, vn.subtype);
+    parseVar(vn: VarNode, ft: FILETAG) {
+        let t = this.getType(vn.type, vn.subtype, ft);
         let val = vn.value;
         if (val == null) val = this.getDefaultVal(vn.type);
 
         if (this.ast.findTypeEnum(vn.type)) {
-            t = `SE.${t}`;
+            t = ft == FILETAG.Enum ? t : `SE.${t}`;
         }
         else if (this.ast.findTypeStruct(vn.type)) {
-            t = `SS.${t} | null`;
+            t = ft == FILETAG.Struct ? `${t} | null` : `SS.${t} | null`;
         }
         else if (vn.type == ETYPE.OBJECT || vn.type == ETYPE.ARRAY) {
             t = `${t} | null`;

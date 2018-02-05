@@ -51,6 +51,12 @@ export enum OUTTAG {
     common,
     client,
     server,
-}
+};
+
+export enum FILETAG {
+    Enum,
+    Struct,
+    API,
+};
 
 

@@ -2,7 +2,7 @@ import AST from "../../ast";
 import BaseOutput from "./base";
 import { ETYPE } from "../../types";
 import { format } from "util";
-import { VarNode, OUTTAG } from "../../astnode";
+import { VarNode, OUTTAG, FILETAG } from "../../astnode";
 
 let typeTable: any = {};
 typeTable[ETYPE.ARRAY] = 'List<%s>';
@@ -57,7 +57,7 @@ export default class CSharpOutput extends BaseOutput {
     }
 
 
-    parseVar(vn: VarNode) {
+    parseVar(vn: VarNode, ft: FILETAG) {
         let t = this.getType(vn.type, vn.subtype);
         let val = vn.value;
         if (val == null) val = this.getDefaultVal(vn.type);
@@ -70,6 +70,6 @@ export default class CSharpOutput extends BaseOutput {
         let structMap = this.ast.getStructMap(OUTTAG.client);
         this.structOutput(structMap, 'SharedStruct.cs', 'csharp_struct.ejs');
         let apiMap = this.ast.getAPIMap(OUTTAG.client);
-        this.apiOutput(apiMap,'API.cs','csharp_api.ejs');
+        this.apiOutput(apiMap, 'API.cs', 'csharp_api.ejs');
     }
 }
