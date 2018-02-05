@@ -36,7 +36,20 @@ export default class TypeScriptOutput extends BaseOutput {
         if (t == ETYPE.ARRAY) {
             let tmp = ([t] as string[]).concat(subt);
             let item = tmp[tmp.length - 1];
-            item = typeTable[item] || item;
+
+            if (this.ast.findTypeEnum(item)) {
+                item = `SE.${item}`;
+            }
+            else if (this.ast.findTypeStruct(item)) {
+                item = `SS.${item}`;
+            }
+            else if (typeTable[item]) {
+                item = typeTable[item];
+            }
+            else {
+                throw new Error(`cannot find array type ${item}`);
+            }
+
             for (let i = tmp.length - 1; i > 0; i--) {
                 let array = typeTable[tmp[i - 1]]
                 item = format(array, item)
@@ -85,6 +98,6 @@ export default class TypeScriptOutput extends BaseOutput {
         let structMap = this.ast.getStructMap(OUTTAG.server);
         this.structOutput(structMap, 'SharedStruct.ts', 'typescript_struct.ejs');
         let apiMap = this.ast.getAPIMap(OUTTAG.server);
-        this.apiOutput(apiMap,'API.ts','typescript_api.ejs');
+        this.apiOutput(apiMap, 'API.ts', 'typescript_api.ejs');
     }
 }
