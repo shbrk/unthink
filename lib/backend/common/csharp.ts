@@ -85,7 +85,7 @@ export default class CSharpOutput extends BaseOutput {
         data.time = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
 
         for (let an of map.values()) {
-            let list = data.apis.get(an.mod)
+            let list = data.apis.get(this.switchUpperCase(an.mod))
             if (!list) {
                 list = new Array<any>();
                 data.apis.set( this.switchUpperCase(an.mod), list);
