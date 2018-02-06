@@ -2,8 +2,7 @@ import AST from "./lib/ast";
 import * as path from 'path';
 import { requireJsonNoComment } from "./lib/json";
 import * as fs from "fs";
-import { mkdirSync } from "fs";
-import { dirname } from "path";
+import { try2mkdir } from "./lib/helper";
 
 const relativePath = path.relative(process.cwd(), __dirname);
 const resPath = relativePath == 'dist' ? './res/' : process.cwd(); // 判断是否是调试模式
@@ -39,30 +38,10 @@ function output(ast: AST, list: any) {
     let ejsPath = path.resolve(curPath, './ejs');
     for (let name in list) {
         let outPath = path.resolve(list[name]);
-        mkdir(outPath);
+        try2mkdir(outPath);
         require(`./lib/backend/${name}`).default(ast, outPath, ejsPath);
     }
 }
-
-function mkdir(dirpath: string) {
-    let list = [dirpath];
-    while (true) {
-        if (list.length == 0) break;
-        let dir = list.pop() as string;
-        if (!fs.existsSync(dir)) {
-            let parent = path.dirname(dir);
-            if (fs.existsSync(parent)) {
-                fs.mkdirSync(dir);
-            }
-            else {
-                list.push(dir);
-                list.push(parent);
-            }
-        }
-    }
-};
-
-
 
 let ast = createAST(config);
 output(ast, config.out);

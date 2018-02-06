@@ -3,6 +3,7 @@ import BaseOutput from "./base";
 import { ETYPE } from "../../types";
 import { format } from "util";
 import { VarNode, OUTTAG, FILETAG, APINode } from "../../astnode";
+import { render } from "../../helper";
 
 let typeTable: any = {};
 typeTable[ETYPE.ARRAY] = 'List<%s>';
@@ -134,7 +135,7 @@ export default class CSharpOutput extends BaseOutput {
 
             list.push(node);
         }
-        this.render(fileName, ejsName, data);
+        render(fileName, ejsName, data,this.ejsPath, this.outPath);
     }
 
 

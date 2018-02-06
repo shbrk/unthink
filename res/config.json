@@ -1,7 +1,7 @@
 {
     "out": {              // 需要输出的文件种类，对应backend的种类
         "unity": "./out/unity",
-        "thinkjs": "./out/thinkjs"
+        "thinkjs": "./out/thinkjs" //thinkjs 项目根目录
     },
     "request_required": true,
     "response_required": true

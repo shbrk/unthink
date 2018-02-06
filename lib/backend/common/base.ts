@@ -1,8 +1,8 @@
-import * as ejs from 'ejs';
 import * as path from 'path';
 import * as fs from 'fs';
 import AST from '../../ast';
 import { EnumNode, StructNode, VarNode, OUTTAG, APINode, FILETAG } from '../../astnode';
+import { render } from '../../helper';
 
 
 export default class BaseOutput {
@@ -57,7 +57,7 @@ export default class BaseOutput {
             else
                 data.enums.push(node);
         }
-        this.render(fileName, ejsName, data);
+        render(fileName, ejsName, data, this.ejsPath, this.outPath);
     }
 
 
@@ -84,7 +84,7 @@ export default class BaseOutput {
             }
             data.structs.push(node);
         }
-        this.render(fileName, ejsName, data);
+        render(fileName, ejsName, data, this.ejsPath, this.outPath);
     }
 
     apiOutput(map: Map<string, APINode>, fileName: string, ejsName: string) {
@@ -141,14 +141,6 @@ export default class BaseOutput {
 
             list.push(node);
         }
-        this.render(fileName, ejsName, data);
-    }
-
-    render(fileName: string, ejsName: string, data: {}) {
-        let ejsFilePath = path.join(this.ejsPath, ejsName);
-        let temp = fs.readFileSync(ejsFilePath, { encoding: 'utf-8' });
-        let content = ejs.render(temp, data, { compileDebug: true });
-        let outFilePath = path.join(this.outPath, fileName)
-        fs.writeFileSync(outFilePath, content, { encoding: 'utf-8' });
+        render(fileName, ejsName, data, this.ejsPath, this.outPath);
     }
 }
