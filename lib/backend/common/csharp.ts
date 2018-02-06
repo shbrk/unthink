@@ -2,7 +2,7 @@ import AST from "../../ast";
 import BaseOutput from "./base";
 import { ETYPE } from "../../types";
 import { format } from "util";
-import { VarNode, OUTTAG, FILETAG } from "../../astnode";
+import { VarNode, OUTTAG, FILETAG, APINode } from "../../astnode";
 
 let typeTable: any = {};
 typeTable[ETYPE.ARRAY] = 'List<%s>';
@@ -29,6 +29,10 @@ export default class CSharpOutput extends BaseOutput {
 
     constructor(ast: AST, outPath: string, ejsPath: string) {
         super(ast, outPath, ejsPath);
+    }
+
+    parseExtends(base: string | null) {
+        return base ? ` : ${base}` : '';
     }
 
     getType(t: string, subt: string[]) {
@@ -63,6 +67,76 @@ export default class CSharpOutput extends BaseOutput {
         if (val == null) val = this.getDefaultVal(vn.type);
         return [t, val];
     }
+
+    switchUpperCase(varName: string) {
+        if (varName && varName.length > 0) {
+            let prefix = varName.substr(0, 1);
+            let rest = varName.substr(1);
+            prefix = prefix.toUpperCase();
+            return `${prefix}${rest}`;
+        }
+    }
+
+
+    apiOutput(map: Map<string, APINode>, fileName: string, ejsName: string) {
+        let data: any = {};
+        data.apis = new Map<string, Array<any>>();
+        let now = new Date();
+        data.time = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+
+        for (let an of map.values()) {
+            let list = data.apis.get(an.mod)
+            if (!list) {
+                list = new Array<any>();
+                data.apis.set( this.switchUpperCase(an.mod), list);
+            }
+    
+            let node: any = {};
+            node.name = an.name;
+            node.mod = an.mod;
+            node.upperName = this.switchUpperCase(node.name);
+            node.comment = this.parseComment(an.comment);
+            if (an.req) {
+                node.req = {};
+                node.req.comment = this.parseComment(an.req.comment);
+                node.req.args = [];
+                node.reqArgs = '';
+                for (let vn of an.req.args) {
+                    let [t, val] = this.parseVar(vn, FILETAG.API);
+                    let v: any = {};
+                    v.name = vn.name;
+                    v.type = t;
+                    v.value = val;
+                    v.comment = this.parseComment(vn.comment);
+                    node.req.args.push(v);
+                    node.reqArgs = `${node.reqArgs}, ${v.type} ${v.name}`;
+                }
+                if (node.reqArgs.length > 2) node.reqArgs = node.reqArgs.substr(2);
+            }
+
+            if (an.res) {
+                node.res = {};
+                node.res.comment = this.parseComment(an.res.comment);
+                node.res.args = [];
+                node.resArgs = '';
+                for (let vn of an.res.args) {
+                    let [t, val] = this.parseVar(vn, FILETAG.API);
+                    let v: any = {};
+                    v.name = vn.name;
+                    v.type = t;
+                    v.value = val;
+                    v.comment = this.parseComment(vn.comment);
+                    node.res.args.push(v);
+                    node.resArgs = `${node.resArgs}, ${v.type} ${v.name}`;
+                }
+                if (node.resArgs.length > 2) node.resArgs = node.resArgs.substr(2);
+            }
+
+            list.push(node);
+        }
+        this.render(fileName, ejsName, data);
+    }
+
 
     doOutput() {
         let enumMap = this.ast.getEnumMap(OUTTAG.client);

@@ -1,6 +1,6 @@
 {
     "System": { // 模块
-        "Login": { // 玩家登陆
+        "login": { // 玩家登陆
             "<req>": { // 请求登陆
                 "name": "string",
                 "pwd": "string"

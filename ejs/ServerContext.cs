@@ -57,7 +57,7 @@ public class ServerResponse<T>
     public IEnumerator Wait()
     {
         Debug.Log(string.Format("SERVER REQUEST ==> {0},{1}", request.url, postData));
-        yield return request.Send();
+        yield return request.SendWebRequest();
         ServerMessage<T> msg = null;
         var txt = request.downloadHandler.text;
 
