@@ -1,6 +1,6 @@
 # ignore dir
 /dist
-/output
+/out
 /node_modules
 /.vscode
 

@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-01 17:51:24 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-06 19:47:09
+ * @Last Modified time: 2018-02-07 17:16:30
  */
 
 import AST from "../../ast";
@@ -89,6 +89,7 @@ function controllerOutput(ast: AST, outPath: string, ejsPath: string) {
         try2mkdir(path.dirname(fileName));
         let sf = tsAST.addSourceFileIfExists(fileName) || tsAST.createSourceFile(fileName);
         checkImport(sf, an.mod);
+        checkImport(sf,"think","thinkjs");
         checkFunction(checkClass(sf), an.mod, an.name, an.comment);
         sf.saveSync();
     }

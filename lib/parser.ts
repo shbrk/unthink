@@ -2,17 +2,18 @@
  * @Author: shenzhengyi 
  * @Date: 2018-01-31 14:06:39 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-01 17:27:54
+ * @Last Modified time: 2018-02-07 15:32:43
  */
 
 import * as json from './json';
 import * as types from './types';
 import { EnumNode, StructNode, APINode, OUTTAG, VarNode, ReqNode, ResNode } from "./astnode";
+import AST from './ast';
 
 
 export default class Parser {
-    ast: any;
-    constructor(ast: any) {
+    ast: AST;
+    constructor(ast: AST) {
         this.ast = ast;
     }
 
