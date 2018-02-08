@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-01 17:51:24 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-07 17:16:30
+ * @Last Modified time: 2018-02-08 13:34:03
  */
 
 import AST from "../../ast";
@@ -65,7 +65,7 @@ function checkVar(method: MethodDeclaration, mod: string, name: string) {
             declarationType: VariableDeclarationType.Const,
             declarations: [{
                 name: 'reqData',
-                initializer: `<${mod}.${name}Request>this.post()`
+                initializer: `<${mod}.${name}Request>this.post().data`
             }]
         });
     }

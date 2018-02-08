@@ -1,8 +1,9 @@
 {
-    "out": {              // 需要输出的文件种类，对应backend的种类
-        "unity": "./out/unity",
-        "thinkjs": "./out/thinkjs", //thinkjs 项目根目录
-        "json-schema":"out/thinkjs/public/schema" // json-schema目录
+    "out": {              /* 需要输出的文件种类，对应backend的种类*/
+        //"unity": "./out/unity", /*unity工程assets目录*/
+        "unity-gameframework":"/out/unity",  /*unity工程Script目录*/
+        "thinkjs": "./out/thinkjs", /*thinkjs 项目根目录*/
+        "json-schema":"out/thinkjs/public/schema"  /*json-schema目录*/
     },
     "request_required": true,
     "response_required": true

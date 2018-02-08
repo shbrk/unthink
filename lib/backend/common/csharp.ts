@@ -89,9 +89,9 @@ export default class CSharpOutput extends BaseOutput {
             let list = data.apis.get(this.switchUpperCase(an.mod))
             if (!list) {
                 list = new Array<any>();
-                data.apis.set( this.switchUpperCase(an.mod), list);
+                data.apis.set(this.switchUpperCase(an.mod), list);
             }
-    
+
             let node: any = {};
             node.name = an.name;
             node.mod = an.mod;
@@ -135,16 +135,22 @@ export default class CSharpOutput extends BaseOutput {
 
             list.push(node);
         }
-        render(fileName, ejsName, data,this.ejsPath, this.outPath);
+        render(fileName, ejsName, data, this.ejsPath, this.outPath);
     }
 
 
-    doOutput() {
-        let enumMap = this.ast.getEnumMap(OUTTAG.client);
-        this.enumOutput(enumMap, 'SharedEnum.cs', 'csharp_enum.ejs');
-        let structMap = this.ast.getStructMap(OUTTAG.client);
-        this.structOutput(structMap, 'SharedStruct.cs', 'csharp_struct.ejs');
-        let apiMap = this.ast.getAPIMap(OUTTAG.client);
-        this.apiOutput(apiMap, 'API.cs', 'csharp_api.ejs');
+    doOutput(enumOut = true, structOut = true, apiOut = true) {
+        if (true) {
+            let enumMap = this.ast.getEnumMap(OUTTAG.client);
+            this.enumOutput(enumMap, 'SharedEnum.cs', 'csharp_enum.ejs');
+        }
+        if (true) {
+            let structMap = this.ast.getStructMap(OUTTAG.client);
+            this.structOutput(structMap, 'SharedStruct.cs', 'csharp_struct.ejs');
+        }
+        if (true) {
+            let apiMap = this.ast.getAPIMap(OUTTAG.client);
+            this.apiOutput(apiMap, 'API.cs', 'csharp_api.ejs');
+        }
     }
 }

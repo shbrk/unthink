@@ -92,12 +92,19 @@ export default class TypeScriptOutput extends BaseOutput {
         return [t, val];
     }
 
-    doOutput() {
-        let enumMap = this.ast.getEnumMap(OUTTAG.server);
-        this.enumOutput(enumMap, 'SharedEnum.ts', 'typescript_enum.ejs');
-        let structMap = this.ast.getStructMap(OUTTAG.server);
-        this.structOutput(structMap, 'SharedStruct.ts', 'typescript_struct.ejs');
-        let apiMap = this.ast.getAPIMap(OUTTAG.server);
-        this.apiOutput(apiMap, 'API.ts', 'typescript_api.ejs');
+    doOutput(enumOut = true, structOut=true, apiOut=true) {
+        if (true) {
+            let enumMap = this.ast.getEnumMap(OUTTAG.server);
+            this.enumOutput(enumMap, 'SharedEnum.ts', 'typescript_enum.ejs');
+        }
+        if (true) {
+            let structMap = this.ast.getStructMap(OUTTAG.server);
+            this.structOutput(structMap, 'SharedStruct.ts', 'typescript_struct.ejs');
+        }
+        if (true) {
+
+            let apiMap = this.ast.getAPIMap(OUTTAG.server);
+            this.apiOutput(apiMap, 'API.ts', 'typescript_api.ejs');
+        }
     }
 }

@@ -16,7 +16,7 @@ export default class BaseOutput {
         this.ast = ast;
     }
 
-    doOutput() {
+    doOutput(enumOut= true, structOut= true, apiOut= true) {
     }
 
     parseComment(comment: string | null) {
