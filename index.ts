@@ -41,7 +41,9 @@ function output(ast: AST, list: any) {
     }
 }
 
+console.log('');
 let ast = createAST(config);
 output(ast, config.out);
+console.log('');
 console.log('done!');
 

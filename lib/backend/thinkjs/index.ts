@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-01 17:51:24 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-08 18:42:55
+ * @Last Modified time: 2018-02-08 18:55:14
  */
 
 import AST from "../../ast";
@@ -89,10 +89,18 @@ function controllerOutput(ast: AST, outPath: string, ejsPath: string) {
     for (let an of map.values()) {
         let fileName = path.join(outPath, 'controller', `${an.mod}.ts`);
         try2mkdir(path.dirname(fileName));
-        let sf = tsAST.addSourceFileIfExists(fileName) || tsAST.createSourceFile(fileName);
+        let sf = tsAST.getSourceFile(fileName);
+        if (!sf) {
+            sf = tsAST.addSourceFileIfExists(fileName) || tsAST.createSourceFile(fileName);
+        }
         checkImport(sf, an.mod);
         checkImport(sf, "think", "thinkjs");
         checkFunction(checkClass(sf), an.mod, an.name, an.comment);
+    }
+
+    let sfs = tsAST.getSourceFiles();
+    for (let sf of sfs) {
         sf.saveSync();
+        console.log(path.normalize(sf.getFilePath()));
     }
 }

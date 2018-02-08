@@ -2,14 +2,14 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-01 17:51:31 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-08 18:42:30
+ * @Last Modified time: 2018-02-08 19:03:59
  */
 
 import AST from "../../ast";
 import * as path from 'path';
 import * as fs from 'fs';
 import CSharpOutput from "../common/csharp";
-import { try2mkdir } from "../../helper";
+import { try2mkdir, render } from "../../helper";
 
 export default function (ast: AST, conf: any, ejsPath: string) {
     let outPath = typeof conf == 'string' ? conf : conf.path;
@@ -18,8 +18,9 @@ export default function (ast: AST, conf: any, ejsPath: string) {
     let cs = new CSharpOutput(ast, outPath, ejsPath);
     cs.doOutput();
 
-    let outFile = path.join(outPath, 'ServerContext.cs');
-    let srcFile = path.join(ejsPath, 'ServerContext.cs');
-    try2mkdir(path.dirname(outPath));
-    if (!fs.existsSync(outFile)) fs.copyFileSync(srcFile, outFile);
+    let outName = 'ServerContext.cs';
+    let ejsName = 'context.ejs';
+    let outFile = path.join(outPath, outName);
+    let ejsFile = path.join(ejsPath, ejsName);
+    if (!fs.existsSync(outFile)) render(outName, ejsName, {}, ejsPath, outPath);
 }
