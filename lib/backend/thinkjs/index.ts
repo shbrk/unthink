@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-01 17:51:24 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-08 13:34:03
+ * @Last Modified time: 2018-02-08 18:42:55
  */
 
 import AST from "../../ast";
@@ -13,16 +13,18 @@ import { try2mkdir } from "../../helper";
 import TsSimpleAst, { ClassDeclaration, MethodDeclarationStructure, VariableDeclarationType, Expression, ExpressionWithTypeArguments, ImportExpression, SourceFile, MethodDeclaration } from 'ts-simple-ast';
 
 
-export default function (ast: AST, outPath: string, ejsPath: string) {
+export default function (ast: AST, conf: any, ejsPath: string) {
+    let outPath = typeof conf == 'string' ? conf : conf.path;
     outPath = path.join(outPath, 'src');
-    let tsOutPath = path.join(outPath, 'network');
+    ejsPath = path.join(ejsPath, 'typescript');
+    let tsOutPath = path.join(outPath, 'protocol');
     try2mkdir(tsOutPath);
     let ts = new TypeScriptOutput(ast, tsOutPath, ejsPath);
     ts.doOutput();
     controllerOutput(ast, outPath, ejsPath);
 }
 
-function checkImport(sf: SourceFile, mod: string, specifier: string = '../network/api') {
+function checkImport(sf: SourceFile, mod: string, specifier: string = '../protocol/api') {
     let importd = sf.getImport(importDeclaration => { return importDeclaration.getModuleSpecifier() == specifier; });
     if (!importd) { importd = sf.addImportDeclaration({ moduleSpecifier: specifier }); }
     let impordNames = importd.getNamedImports();
@@ -89,7 +91,7 @@ function controllerOutput(ast: AST, outPath: string, ejsPath: string) {
         try2mkdir(path.dirname(fileName));
         let sf = tsAST.addSourceFileIfExists(fileName) || tsAST.createSourceFile(fileName);
         checkImport(sf, an.mod);
-        checkImport(sf,"think","thinkjs");
+        checkImport(sf, "think", "thinkjs");
         checkFunction(checkClass(sf), an.mod, an.name, an.comment);
         sf.saveSync();
     }

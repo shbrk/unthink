@@ -1,0 +1,53 @@
+// ----------------------------------------
+//
+//  MADE BY GENERATOR AT <%-time%>,
+//  PLEASE DO NOT REWRITE.
+//
+// ----------------------------------------
+
+using GameFramework.Net;
+
+namespace <%-namespace%>
+{
+    <%_ for(let node of list) { _%>
+    <%_ if(node.req) { _%>
+    <%_ if(node.req.comment != '') {_%>
+    /// <summary>
+    /// <%-node.req.comment%>
+    /// </summary>
+    <%_}_%>
+    [RequestMessage(URL = "<%-node.mod%>/<%-node.name%>")]
+    public class <%-node.upperName%>Request
+    {
+        <%_ for(let v of node.req.args) {_%>
+        <%_ if(v.comment != '') {_%>
+        /// <summary>
+        /// <%-v.comment%>
+        /// </summary>
+        <%_}_%>
+        public <%-v.type%> <%-v.name%> = <%-v.value%>; 
+        <%_}_%>
+    } 
+    <%_}_%>
+
+    <%_ if(node.res) {_%>
+    <%_ if(node.res.comment != '') {_%>
+    /// <summary>
+    /// <%-node.res.comment%>
+    /// </summary>
+    <%_}_%>
+    public class <%-node.upperName%>Response 
+    {
+        <%_ for(let v of node.res.args) {_%>
+        <%_ if(v.comment != '') {_%>
+        /// <summary>
+        /// <%-v.comment%>
+        /// </summary>
+        <%_}_%>
+        public <%-v.type%> <%-v.name%> = <%-v.value%>;
+        <%_}_%>
+    } 
+    <%_}_%>
+
+    <%_}_%>
+}

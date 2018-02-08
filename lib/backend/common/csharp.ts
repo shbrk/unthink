@@ -3,7 +3,6 @@ import BaseOutput from "./base";
 import { ETYPE } from "../../types";
 import { format } from "util";
 import { VarNode, OUTTAG, FILETAG, APINode } from "../../astnode";
-import { render } from "../../helper";
 
 let typeTable: any = {};
 typeTable[ETYPE.ARRAY] = 'List<%s>';
@@ -28,10 +27,7 @@ defaultTable[ETYPE.STRING] = '""';
 
 export default class CSharpOutput extends BaseOutput {
 
-    constructor(ast: AST, outPath: string, ejsPath: string) {
-        super(ast, outPath, ejsPath);
-    }
-
+   
     parseExtends(base: string | null) {
         return base ? ` : ${base}` : '';
     }
@@ -55,17 +51,22 @@ export default class CSharpOutput extends BaseOutput {
         }
     }
 
-    getDefaultVal(t: string) {
-        if (defaultTable[t])
-            return defaultTable[t];
-        return 'null';
+    getDefaultVal(t: string, subt: string[]) {
+        t = this.getType(t, subt);
+        return `default(${t})`;
+        // if (defaultTable[t])
+        //     return defaultTable[t];
+        // return 'null';
     }
 
+    parseComment(comment: string | null) {
+        return comment ? `${comment}` : '';
+    }
 
     parseVar(vn: VarNode, ft: FILETAG) {
         let t = this.getType(vn.type, vn.subtype);
         let val = vn.value;
-        if (val == null) val = this.getDefaultVal(vn.type);
+        if (val == null) val = this.getDefaultVal(vn.type, vn.subtype);
         return [t, val];
     }
 
@@ -76,15 +77,13 @@ export default class CSharpOutput extends BaseOutput {
             prefix = prefix.toUpperCase();
             return `${prefix}${rest}`;
         }
+        return varName;
     }
 
-
-    apiOutput(map: Map<string, APINode>, fileName: string, ejsName: string) {
+    parseAPIData(map: Map<string, APINode>) {
         let data: any = {};
         data.apis = new Map<string, Array<any>>();
-        let now = new Date();
-        data.time = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
-
+        
         for (let an of map.values()) {
             let list = data.apis.get(this.switchUpperCase(an.mod))
             if (!list) {
@@ -135,22 +134,22 @@ export default class CSharpOutput extends BaseOutput {
 
             list.push(node);
         }
-        render(fileName, ejsName, data, this.ejsPath, this.outPath);
+        return data;
     }
 
 
     doOutput(enumOut = true, structOut = true, apiOut = true) {
-        if (true) {
+        if (enumOut) {
             let enumMap = this.ast.getEnumMap(OUTTAG.client);
-            this.enumOutput(enumMap, 'SharedEnum.cs', 'csharp_enum.ejs');
+            this.enumOutput(enumMap, 'SharedEnum.cs', 'enum.ejs');
         }
-        if (true) {
+        if (structOut) {
             let structMap = this.ast.getStructMap(OUTTAG.client);
-            this.structOutput(structMap, 'SharedStruct.cs', 'csharp_struct.ejs');
+            this.structOutput(structMap, 'SharedStruct.cs', 'struct.ejs');
         }
-        if (true) {
+        if (apiOut) {
             let apiMap = this.ast.getAPIMap(OUTTAG.client);
-            this.apiOutput(apiMap, 'API.cs', 'csharp_api.ejs');
+            this.apiOutput(apiMap, 'API.cs', 'api.ejs');
         }
     }
 }

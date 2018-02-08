@@ -1,0 +1,46 @@
+/**
+ *  MADE BY GENERATOR AT <%-time%>,
+ *  PLEASE DO NOT REWRITE.
+ **/
+ namespace <%-namespace%>
+ {
+    <%_ for(let node of enums) {_%>
+    <%_ if(node.comment != '') {_%>
+    /// <summary>
+    /// <%-node.comment%>
+    /// </summary>
+    <%_}_%>
+    public enum <%-node.name%>
+    {
+      <%_ for(let v of node.mems) {_%>
+        <%_ if(v.comment != '') {_%>
+        /// <summary>
+        /// <%-v.comment%>
+        /// </summary>
+        <%_}_%>
+        <%-v.name%> = <%-v.value%>,
+      <%_}_%>
+    }    
+    
+    <%_}_%>
+    <%_ for(let node of enums_mix) {_%>
+    <%_ if(node.comment != '') {_%>
+    /// <summary>
+    /// <%-node.comment%>
+    /// </summary>
+    <%_}_%>
+    public class <%-node.name%>
+    {
+      <%_ for(let v of node.mems) {_%>
+        <%_ if(v.comment != '') {_%>
+        /// <summary>
+        /// <%-v.comment%>
+        /// </summary>
+        <%_}_%>
+        public static <%-v.type%> <%-v.name%> = <%-v.value%>;
+      <%_}_%>
+    }    
+    
+    <%_}_%>
+}
+

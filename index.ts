@@ -36,10 +36,8 @@ function createAST(config: any) {
 
 function output(ast: AST, list: any) {
     let ejsPath = path.resolve(curPath, './ejs');
-    for (let name in list) {
-        let outPath = path.resolve(list[name]);
-        try2mkdir(outPath);
-        require(`./lib/backend/${name}`).default(ast, outPath, ejsPath);
+    for (let conf in list) {
+        require(`./lib/backend/${conf}`).default(ast, list[conf], ejsPath);
     }
 }
 

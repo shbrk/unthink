@@ -28,10 +28,6 @@ defaultTable[ETYPE.STRING] = '""';
 
 export default class TypeScriptOutput extends BaseOutput {
 
-    constructor(ast: AST, outPath: string, ejsPath: string) {
-        super(ast, outPath, ejsPath);
-    }
-
     getType(t: string, subt: string[], ft: FILETAG) {
         if (t == ETYPE.ARRAY) {
             let tmp = ([t] as string[]).concat(subt);
@@ -92,19 +88,18 @@ export default class TypeScriptOutput extends BaseOutput {
         return [t, val];
     }
 
-    doOutput(enumOut = true, structOut=true, apiOut=true) {
-        if (true) {
+    doOutput(enumOut = true, structOut = true, apiOut = true) {
+        if (enumOut) {
             let enumMap = this.ast.getEnumMap(OUTTAG.server);
-            this.enumOutput(enumMap, 'SharedEnum.ts', 'typescript_enum.ejs');
+            this.enumOutput(enumMap, 'SharedEnum.ts', 'enum.ejs');
         }
-        if (true) {
+        if (structOut) {
             let structMap = this.ast.getStructMap(OUTTAG.server);
-            this.structOutput(structMap, 'SharedStruct.ts', 'typescript_struct.ejs');
+            this.structOutput(structMap, 'SharedStruct.ts', 'struct.ejs');
         }
-        if (true) {
-
+        if (apiOut) {
             let apiMap = this.ast.getAPIMap(OUTTAG.server);
-            this.apiOutput(apiMap, 'API.ts', 'typescript_api.ejs');
+            this.apiOutput(apiMap, 'API.ts', 'api.ejs');
         }
     }
 }

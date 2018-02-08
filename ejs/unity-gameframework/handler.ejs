@@ -1,0 +1,29 @@
+// ----------------------------------------
+//
+//  MADE BY GENERATOR AT <%-time%>,
+//  PLEASE DO NOT REWRITE.
+//
+// ----------------------------------------
+
+using UnityGameFramework.Runtime;
+using GameFramework.Net;
+
+namespace <%-namespace%>
+{
+    <%_ if(node.comment != '') {_%>
+    /// <summary>
+    /// <%-node.comment%>
+    /// </summary>
+    <%_}_%>
+    [MessageHandler(URL = "<%-node.mod%>/<%-node.name%>")]
+    public class <%-node.upperName%>Handler : ResponsetHandlerBase
+    {
+        public override void Handle(object sender, ResponseEventArgs response)
+        {
+            ResponseMessage<<%-node.upperName%>Response> msg = response.GetData<ResponseMessage<<%-node.upperName%>Response>>();
+            EventComponent eventComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<EventComponent>();
+            CommonEventArgs<<%-node.upperName%>Response> arg = new CommonEventArgs<<%-node.upperName%>Response>();
+            eventComponent.Fire(CommonEventArgs<<%-node.upperName%>Response>.EventId, arg);
+        }   
+    }
+}

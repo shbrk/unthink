@@ -1,0 +1,30 @@
+/**
+ *  MADE BY GENERATOR AT <%-time%>,
+ *  PLEASE DO NOT REWRITE.
+ **/
+
+using System.Collections.Generic;
+
+namespace <%-namespace%>
+{
+    <%_ for(let node of structs) {_%>
+    <%_ if(node.comment != '') {_%>
+    /// <summary>
+    /// <%-node.comment%>
+    /// </summary>
+    <%_}_%>
+    public class <%-node.name%> <%-node.base%>
+    {
+      <%_ for(let v of node.mems) {_%>
+        <%_ if(v.comment != '') {_%>
+        /// <summary>
+        /// <%-v.comment%>
+        /// </summary>
+        <%_}_%>
+        public <%-v.type%> <%-v.name%> = <%-v.value%>;
+      <%_}_%>
+    }
+    
+    <%_}%>
+}
+

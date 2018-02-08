@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import AST from '../../ast';
 import { EnumNode, StructNode, VarNode, OUTTAG, APINode, FILETAG } from '../../astnode';
-import { render } from '../../helper';
+import { render as rawRender, getTimeString } from '../../helper';
 
 
 export default class BaseOutput {
@@ -16,7 +16,11 @@ export default class BaseOutput {
         this.ast = ast;
     }
 
-    doOutput(enumOut= true, structOut= true, apiOut= true) {
+    doOutput(enumOut = true, structOut = true, apiOut = true) {
+    }
+
+    render(fileName: string, ejsName: string, data: {}) {
+        rawRender(fileName, ejsName, data, this.ejsPath, this.outPath);
     }
 
     parseComment(comment: string | null) {
@@ -31,7 +35,9 @@ export default class BaseOutput {
         return [vn.type, vn.value];
     }
 
-    enumOutput(map: Map<string, EnumNode>, fileName: string, ejsName: string) {
+
+
+    parseEnumData(map: Map<string, EnumNode>) {
         let data: any = {};
         data.enums = [];
         data.enums_mix = [];
@@ -57,11 +63,15 @@ export default class BaseOutput {
             else
                 data.enums.push(node);
         }
-        render(fileName, ejsName, data, this.ejsPath, this.outPath);
+        return data;
     }
 
+    enumOutput(map: Map<string, EnumNode>, fileName: string, ejsName: string) {
+        let data = this.parseEnumData(map);
+        this.render(fileName, ejsName, data);
+    }
 
-    structOutput(map: Map<string, StructNode>, fileName: string, ejsName: string) {
+    parseStructData(map: Map<string, StructNode>) {
         let data: any = {};
         data.structs = [];
         let now = new Date();
@@ -84,10 +94,15 @@ export default class BaseOutput {
             }
             data.structs.push(node);
         }
-        render(fileName, ejsName, data, this.ejsPath, this.outPath);
+        return data;
     }
 
-    apiOutput(map: Map<string, APINode>, fileName: string, ejsName: string) {
+    structOutput(map: Map<string, StructNode>, fileName: string, ejsName: string) {
+        let data = this.parseStructData(map);
+        this.render(fileName, ejsName, data);
+    }
+
+    parseAPIData(map: Map<string, APINode>) {
         let data: any = {};
         data.apis = new Map<string, Array<any>>();
         let now = new Date();
@@ -141,6 +156,12 @@ export default class BaseOutput {
 
             list.push(node);
         }
-        render(fileName, ejsName, data, this.ejsPath, this.outPath);
+        return data;
+    }
+
+    apiOutput(map: Map<string, APINode>, fileName: string, ejsName: string) {
+        let data = this.parseAPIData(map)
+        data.time = getTimeString(new Date());
+        this.render(fileName, ejsName, data);
     }
 }

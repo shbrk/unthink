@@ -21,9 +21,17 @@ export function try2mkdir(dirpath: string) {
 };
 
 export function render(fileName: string, ejsName: string, data: {}, ejsPath: string, outPath: string) {
+
     let ejsFilePath = path.join(ejsPath, ejsName);
     let temp = fs.readFileSync(ejsFilePath, { encoding: 'utf-8' });
     let content = ejs.render(temp, data, { compileDebug: true });
-    let outFilePath = path.join(outPath, fileName)
+    let outFilePath = path.join(outPath, fileName);
+    try2mkdir(path.dirname(outFilePath));
+    console.log(outFilePath);
     fs.writeFileSync(outFilePath, content, { encoding: 'utf-8' });
+}
+
+
+export function getTimeString(date: Date) {
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 }
