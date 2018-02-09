@@ -22,7 +22,7 @@ namespace <%-namespace%>
         {
             ResponseMessage<<%-node.upperName%>Response> msg = response.GetData<ResponseMessage<<%-node.upperName%>Response>>();
             EventComponent eventComponent = UnityGameFramework.Runtime.GameEntry.GetComponent<EventComponent>();
-            CommonEventArgs<<%-node.upperName%>Response> arg = new CommonEventArgs<<%-node.upperName%>Response>();
+            CommonEventArgs<<%-node.upperName%>Response> arg = new CommonEventArgs<<%-node.upperName%>Response>(msg.errno,msg.errmsg,msg.data);
             eventComponent.Fire(CommonEventArgs<<%-node.upperName%>Response>.EventId, arg);
         }   
     }

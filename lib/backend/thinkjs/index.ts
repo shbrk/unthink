@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-01 17:51:24 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-08 18:55:14
+ * @Last Modified time: 2018-02-09 10:27:09
  */
 
 import AST from "../../ast";
@@ -21,7 +21,8 @@ export default function (ast: AST, conf: any, ejsPath: string) {
     try2mkdir(tsOutPath);
     let ts = new TypeScriptOutput(ast, tsOutPath, ejsPath);
     ts.doOutput();
-    controllerOutput(ast, outPath, ejsPath);
+
+    try { controllerOutput(ast, outPath, ejsPath); } catch (e) { console.log(e); };
 }
 
 function checkImport(sf: SourceFile, mod: string, specifier: string = '../protocol/api') {
@@ -48,6 +49,7 @@ function checkFunction(astClass: ClassDeclaration, mod: string, name: string, co
         let mds: MethodDeclarationStructure = {
             name: funcName,
             isAsync: true,
+            isAbstract: false
         };
         method = astClass.addMethod(mds);
         method.setBodyText(writer => {
@@ -67,7 +69,7 @@ function checkVar(method: MethodDeclaration, mod: string, name: string) {
             declarationType: VariableDeclarationType.Const,
             declarations: [{
                 name: 'reqData',
-                initializer: `<${mod}.${name}Request>this.post().data`
+                initializer: `<${mod}.${name}Request>(<any>this.post()).data`
             }]
         });
     }

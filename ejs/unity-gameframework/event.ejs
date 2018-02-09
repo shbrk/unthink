@@ -6,6 +6,14 @@ namespace <%-namespace%>
     public sealed class CommonEventArgs<T> : GameEventArgs
     {
         public static readonly int EventId = typeof(CommonEventArgs<T>).GetHashCode();
+
+        public CommonEventArgs(int errno, string errmsg, T data)
+        {
+            this.errno = errno;
+            this.errmsg = errmsg;
+            this.data = data;
+        }
+        
         public override int Id
         {
             get
@@ -13,7 +21,7 @@ namespace <%-namespace%>
                 return EventId;
             }
         }
-
+        
         public override void Clear()
         {
             errno = default(int);

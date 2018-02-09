@@ -5,7 +5,7 @@
            "path": "E:/thinkjs/GameFramework-SZ/GameFramework-SZ/Assets/SZClient/DemoGame/Scripts",  /*unity工程Script目录*/
            "namespace":"StarForce"
         },
-        "thinkjs": "./out/thinkjs", /*thinkjs 项目根目录*/
+        "thinkjs": "E:/thinkjs/demots", /*thinkjs 项目根目录*/
         "json-schema":"./out/thinkjs/public/schema"  /*json-schema目录*/
     },
     "request_required": true,
