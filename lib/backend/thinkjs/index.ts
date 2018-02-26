@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-01 17:51:24 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-09 10:27:09
+ * @Last Modified time: 2018-02-26 20:23:25
  */
 
 import AST from "../../ast";
@@ -25,19 +25,27 @@ export default function (ast: AST, conf: any, ejsPath: string) {
     try { controllerOutput(ast, outPath, ejsPath); } catch (e) { console.log(e); };
 }
 
-function checkImport(sf: SourceFile, mod: string, specifier: string = '../protocol/api') {
+function checkImport(sf: SourceFile, mod: string, specifier: string = '../protocol/api', isDefaultExport = false) {
     let importd = sf.getImport(importDeclaration => { return importDeclaration.getModuleSpecifier() == specifier; });
     if (!importd) { importd = sf.addImportDeclaration({ moduleSpecifier: specifier }); }
-    let impordNames = importd.getNamedImports();
-    let hasImported = false;
-    for (let imName of impordNames) { if (mod == imName.getNameNode().getText()) hasImported = true; break; }
-    if (!hasImported) { importd.insertNamedImport(0, { name: mod }) }
+    if (!isDefaultExport) {
+        let impordNames = importd.getNamedImports();
+        let hasImported = false;
+        for (let imName of impordNames) { if (mod == imName.getNameNode().getText()) hasImported = true; break; }
+        if (!hasImported) { importd.insertNamedImport(0, { name: mod }) }
+    }
+    else {
+        let defaultImport = importd.getDefaultImport();
+        if (!defaultImport) importd.setDefaultImport(mod);
+    }
+
+
 }
 
 function checkClass(sf: SourceFile) {
     let astClass;
     for (let c of sf.getClasses()) { if (c.isDefaultExport()) astClass = c; }
-    if (!astClass) { astClass = sf.addClass({ name: 'Controller', extends: 'think.Controller', isDefaultExport: true }); }
+    if (!astClass) { astClass = sf.addClass({ name: 'Controller', extends: 'Base', isDefaultExport: true }); }
     return astClass;
 }
 
@@ -97,6 +105,7 @@ function controllerOutput(ast: AST, outPath: string, ejsPath: string) {
         }
         checkImport(sf, an.mod);
         checkImport(sf, "think", "thinkjs");
+        checkImport(sf, 'Base', './base', true);
         checkFunction(checkClass(sf), an.mod, an.name, an.comment);
     }
 
