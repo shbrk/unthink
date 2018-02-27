@@ -68,6 +68,7 @@ export default class GFW extends CSharpOutput {
                 data.time = getTimeString(new Date());
                 data.node = node;
                 data.namespace = this.namespaceStr;
+                data.fn = k;
 
                 let fn = path.join(pathName, `${k}/${node.upperName}Handler.cs`);
                 if (fs.existsSync(path.join(this.outPath, fn))) continue;
