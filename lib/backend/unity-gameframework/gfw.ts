@@ -55,6 +55,7 @@ export default class GFW extends CSharpOutput {
             data.time = getTimeString(new Date());
             data.list = v;
             data.namespace = this.namespaceStr;
+            data.fn = k;
             this.render(`${pathName}/${k}.cs`, ejsName, data);
         }
     }
