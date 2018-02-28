@@ -1,0 +1,26 @@
+-- MADE BY GENERATOR AT <%-time%>,
+-- PLEASE DO NOT REWRITE.
+
+
+--
+-- Database: `gamedb`
+--
+CREATE DATABASE IF NOT EXISTS `<%-dbname%>` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `<%-dbname%>`;
+
+-- --------------------------------------------------------
+
+<%_ for(let node of mems) {_%>
+--
+-- 表的结构 `<%-node.name%>`
+--
+
+DROP TABLE IF EXISTS `<%-node.name%>`;
+CREATE TABLE IF NOT EXISTS `<%-node.name%>` (
+  <%_ for(let item of node.mems) {_%>
+  `<%-item.name%>` <%-item.type%><%-item.comment%>,
+  <%_}%>  PRIMARY KEY (`uuid`)
+  KEY `USRID` (`usrid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8<%-node.comment%>;
+
+<%_}%>

@@ -5,7 +5,7 @@ import { OUTTAG } from "./astnode";
  * @Author: shenzhengyi 
  * @Date: 2018-01-31 14:05:09 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-01 17:41:44
+ * @Last Modified time: 2018-02-28 10:55:15
  */
 
 export enum ETYPE {
@@ -23,6 +23,7 @@ export enum KEYWORD {
     TYPE = "<type>",
     DEFAULT = "<default>",
     DBTYPE = "<dbtype>",
+    NODB = "<nodb>",
     EXTENDS = "<extends>",
     REQ = "<req>",
     RES = "<res>"
@@ -82,6 +83,14 @@ function getDescVal(val: any) {
     return '';
 }
 
+export function getDescDBType(val: any) {
+    if (typeof val == 'string')
+        return '';
+    else if (val[KEYWORD.DBTYPE])
+        return val[KEYWORD.DBTYPE];
+    return '';
+}
+
 export function getTypeByDescOrThrow(val: any) {
     let t: string = getDescType(val);
     if (t && t != '') {
@@ -128,6 +137,10 @@ export function getExtend(obj: any) {
     if (obj[KEYWORD.EXTENDS])
         return obj[KEYWORD.EXTENDS];
     return null;
+}
+
+export function getNODBTag(obj: any) {
+    return obj[KEYWORD.NODB] ? true : false;
 }
 
 export function getReqOrThrow(obj: any, mod: string, name: string, throwable: boolean = true) {

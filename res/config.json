@@ -1,12 +1,16 @@
 {
     "out": { /* 需要输出的文件种类，对应backend的种类*/
-        "unity": "E:/thinkjs/u2017-cli/Assets/Scripts/", /*unity工程Scripts目录*/
-        "unity-gameframework": {
-            "path": "E:/thinkjs/GameFramework-SZ/GameFramework-SZ/Assets/SZClient/DemoGame/Scripts", /*unity工程Script目录*/
-            "namespace": "StarForce"
-        },
-        "thinkjs": "E:/thinkjs/demots" /*thinkjs 项目根目录*/
-        //  "json-schema":"./out/thinkjs/public/schema"  /*json-schema目录*/
+        "unity": "./out/unity", /*unity工程Scripts目录*/
+        //    "unity-gameframework": {
+        //        "path": "E:/thinkjs/GameFramework-SZ/GameFramework-SZ/Assets/SZClient/DemoGame/Scripts", /*unity工程Script目录*/
+        //        "namespace": "StarForce"
+        //   },
+        //    "thinkjs": "E:/thinkjs/demots", /*thinkjs 项目根目录*/
+        "json-schema": "./out/thinkjs/public/schema", /*json-schema目录*/
+        "sql": {
+            "path": "./out/thinkjs/public/sql/",
+            "dbname": "gamedb"
+        }
     },
     "request_required": true,
     "response_required": true

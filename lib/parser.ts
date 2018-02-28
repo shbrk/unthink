@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-01-31 14:06:39 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-07 15:32:43
+ * @Last Modified time: 2018-02-27 20:57:03
  */
 
 import * as json from './json';
@@ -40,6 +40,7 @@ export default class Parser {
                 vn.type = types.getTypeByValueOrThrow(val);
                 vn.subtype = [];
                 vn.value = types.parseValueByType(vn.type, val);
+                vn.dbtype = types.getDescDBType(val);
                 if (vn.type != types.ETYPE.INT) en.ismix = true;
                 en.members.push(vn);
             }
@@ -57,6 +58,7 @@ export default class Parser {
             sn.base = types.getExtend(structData);
             sn.comment = json.getComment(structName, structJsonList);
             sn.members = new Array<VarNode>();
+            sn.nodb = types.getNODBTag(structData);
 
             for (const structMemName in structData) {
                 if (json.isComment(structMemName)) continue;
@@ -68,6 +70,7 @@ export default class Parser {
                 vn.type = types.getTypeByDescOrThrow(val);
                 vn.subtype = types.getSubTypeByDescOrThrow(val);
                 vn.value = types.getDefaultValByType(vn.type, val);
+                vn.dbtype = types.getDescDBType(val);
                 sn.members.push(vn);
             }
             structMap.set(sn.name, sn);
@@ -110,6 +113,7 @@ export default class Parser {
                         vn.type = types.getTypeByDescOrThrow(val);
                         vn.subtype = types.getSubTypeByDescOrThrow(val);
                         vn.value = types.getDefaultValByType(vn.type, val);
+                        vn.dbtype = types.getDescDBType(val);
                         an.req.args.push(vn);
                     }
                 }
@@ -128,6 +132,7 @@ export default class Parser {
                         vn.type = types.getTypeByDescOrThrow(val);
                         vn.subtype = types.getSubTypeByDescOrThrow(val);
                         vn.value = types.getDefaultValByType(vn.type, val);
+                        vn.dbtype = types.getDescDBType(val);
                         an.res.args.push(vn);
                     }
                 }

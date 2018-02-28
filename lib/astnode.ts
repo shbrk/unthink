@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-01-31 14:04:55 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-02 15:03:34
+ * @Last Modified time: 2018-02-27 20:53:40
  */
 
 export class VarNode {
@@ -10,6 +10,7 @@ export class VarNode {
     comment: string | null;
     type: string;
     subtype: Array<string>;
+    dbtype:string;
     value: string | null;
 };
 
@@ -26,6 +27,7 @@ export class StructNode {
     comment: string | null;
     members: Array<VarNode>;
     base: string;
+    nodb:boolean;
 };
 
 
