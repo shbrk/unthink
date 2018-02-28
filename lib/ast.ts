@@ -30,14 +30,27 @@ export default class AST {
     checker: TypeChecker;
     config: any;
 
+    filesCommon: string[] = [];
+    filesClientOnly: string[] = [];
+    filesServerOnly: string[] = [];
+
     constructor(config: any) {
         this.config = config;
         this.parser = new Parser(this);
         this.checker = new TypeChecker(this);
     }
 
+    addFile(filePath: string, tag = OUTTAG.common) {
+        if (tag == OUTTAG.common)
+            this.filesCommon.push(filePath);
+        else if (tag == OUTTAG.client)
+            this.filesClientOnly.push(filePath);
+        else if (tag == OUTTAG.server)
+            this.filesServerOnly.push(filePath);
+    }
 
     addEnum(filePath: string, tag = OUTTAG.common) {
+        this.addFile(filePath, tag);
         let jsonObj = json.requireJson(filePath);
         if (tag == OUTTAG.client)
             this.parser.parseEnum(jsonObj, this.enumMapClientOnly);
@@ -48,6 +61,7 @@ export default class AST {
     }
 
     addStruct(filePath: string, tag = OUTTAG.common) {
+        this.addFile(filePath, tag);
         let jsonObj = json.requireJson(filePath);
         if (tag == OUTTAG.client)
             this.parser.parseStruct(jsonObj, this.structMapClientOnly);
@@ -58,6 +72,7 @@ export default class AST {
     }
 
     addAPI(filePath: string, tag = OUTTAG.common) {
+        this.addFile(filePath, tag);
         let jsonObj = json.requireJson(filePath);
         if (tag == OUTTAG.client)
             this.parser.parseAPI(jsonObj, this.apiMapClientOnly);

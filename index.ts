@@ -4,6 +4,7 @@ import { requireJsonNoComment } from "./lib/json";
 import * as fs from "fs";
 import { try2mkdir } from "./lib/helper";
 import { OUTTAG } from "./lib/astnode";
+import { midProcess } from "./lib/midprocess";
 
 const relativePath = path.relative(process.cwd(), __dirname);
 const resPath = relativePath == 'dist' ? './res/' : process.cwd(); // 判断是否是调试模式
@@ -18,7 +19,7 @@ config.response_required = config.response_required || false;
 
 function createAST(config: any) {
     let ast = new AST(config);
-    
+
     ast.addEnum(path.join(resPath, 'common/enum.json'));
     ast.addEnum(path.join(resPath, 'server_only/enum.json'), OUTTAG.server);
     ast.addEnum(path.join(resPath, 'client_only/enum.json'), OUTTAG.client);
@@ -35,6 +36,9 @@ function createAST(config: any) {
     return ast;
 }
 
+function supplement(ast: AST) {
+    midProcess(ast,resPath);
+}
 
 function output(ast: AST, list: any) {
     let ejsPath = path.resolve(curPath, './ejs');
@@ -45,6 +49,7 @@ function output(ast: AST, list: any) {
 
 console.log('');
 let ast = createAST(config);
+supplement(ast);
 output(ast, config.out);
 console.log('');
 console.log('done!');
