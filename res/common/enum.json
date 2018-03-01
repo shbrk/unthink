@@ -1,9 +1,8 @@
 {
-    "EError": { // 错误提示
-        "NoError": 0,
-        "ServerError": 1, //服务器错误
-        "DataError": 2, //数据错误
-        "UnknownError": 3 //不明错误
+    "EItemState": { //物品状态
+        "normal": 0, //正常状态
+        "locked": 1, //被锁定
+        "countdown": 2 //冷却中
     },
     "ECommon": { // 通用枚举
         "MaxNameLenth": 20, //名字最大长度

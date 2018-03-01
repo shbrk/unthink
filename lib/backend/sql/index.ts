@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-27 20:31:44 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-28 20:23:19
+ * @Last Modified time: 2018-03-01 11:35:03
  */
 
 
@@ -51,7 +51,7 @@ function extendsFromDBObject(name: string, ast: AST) {
 }
 
 function generate(sn: StructNode, ast: AST) {
-    let [members,index] = getAllMembers(sn.name, ast);
+    let { members, index } = getAllMembers(sn.name, ast);
     let data: any = {};
     let mems: any[] = [];
     for (let vn of members) {
@@ -82,9 +82,9 @@ function getAllMembers(name: string, ast: AST) {
     for (let i = chains.length - 1; i >= 0; i--) {
         let sn = chains[i];
         members = members.concat(sn.members);
-        if(index == '' && sn.dbindex) index = sn.dbindex;
+        if (index == '' && sn.dbindex) index = sn.dbindex;
     }
-    return [members,index];
+    return { members, index };
 }
 
 function parseTableComment(comment: string | null) {

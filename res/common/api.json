@@ -6,14 +6,13 @@
                 "pwd": "string"
             },
             "<res>": {
-                "usr": "UserInfo", // 玩家信息
-                "error": "EError" //错误类型
+                "error": "int" //错误类型
             }
         },
         "Logout": {
             "<req>": {},
             "<res>": {
-                "error": "EError"
+                "error": "int"
             }
         }
     },

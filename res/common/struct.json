@@ -1,26 +1,28 @@
 {
-    "DBObject": { // 所有入库对象应该继承此类 
-        "uuid":"string"
+    "DBBase": { // 所有入库对象应该继承此类 
     },
-    "Item": { // 玩家物品
-        "cid": "int",
-        "count": "int",
-        "sale": "float", //折扣
-        "num":"int64",
-        "price":"double",
-        "prob":"object"
+    "DBObject": { // 所有玩家个人数据应该继承此类。
+        "<extends>": "DBBase",
+        "<nodb>": true,
+        "<dbindex>": "PRIMARY KEY (`uuid`),KEY `USRID` (`usrid`)",
+        "uuid": "string",
+        "usrid": "int64"
     },
-    "UserInfo": {
-        "<extends>": "DBObject",// 继承了DBObject 将会生成UserInfo表
-        "name": "string", // 玩家姓名
-        "level": "int",
-        "bag": "array<Item>",
-        "usingItem": "Item",
-        "custom":"object",
-        "info": { // 自定义格式
-            "<type>": "string",
-            "<dbType>": "text",
-            "<default>": "abc"
-        }
+    "DBGlobalObject": { // 所有全局数据应该继承此类（例如公会）。
+        "<extends>": "DBBase",
+        "<nodb>": true,
+        "<dbindex>": "PRIMARY KEY (`uuid`)",
+        "uuid": "string"
+    },
+    "Item": { // 玩家物品的结构
+        "<extends>": "DBObject",
+        "cid":"int",//对应的策划表id
+        "count":"int", // 物品的数量
+        "state":"EItemState" // 对应物品的状态。 
+    },
+    "Task": {
+        "<extends>": "DBObject",
+        "cid":"int",
+        "phase":"int" // 或者定义一个对应枚举
     }
 }
