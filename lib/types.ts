@@ -25,6 +25,7 @@ export enum KEYWORD {
     DBTYPE = "<dbtype>",
     NODB = "<nodb>",
     EXTENDS = "<extends>",
+    DBINDEX = "<dbindex>",
     REQ = "<req>",
     RES = "<res>"
 }
@@ -89,6 +90,10 @@ export function getDescDBType(val: any) {
     else if (val[KEYWORD.DBTYPE])
         return val[KEYWORD.DBTYPE];
     return '';
+}
+
+export function getDBIndex(val: any) {
+    return val[KEYWORD.DBINDEX];
 }
 
 export function getTypeByDescOrThrow(val: any) {

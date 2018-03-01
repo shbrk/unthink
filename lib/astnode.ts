@@ -28,6 +28,7 @@ export class StructNode {
     members: Array<VarNode>;
     base: string;
     nodb:boolean;
+    dbindex:string;
 };
 
 

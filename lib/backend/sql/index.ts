@@ -2,7 +2,7 @@
  * @Author: shenzhengyi 
  * @Date: 2018-02-27 20:31:44 
  * @Last Modified by: shenzhengyi
- * @Last Modified time: 2018-02-28 11:00:15
+ * @Last Modified time: 2018-02-28 20:23:19
  */
 
 
@@ -14,11 +14,11 @@ import * as path from 'path';
 
 let typeTable: any = {};
 typeTable[ETYPE.ARRAY] = 'text NOT NULL';
-typeTable[ETYPE.BOOL] = 'tinyint NOT NULL';
-typeTable[ETYPE.DOUBLE] = 'bigint(11) NOT NULL';
-typeTable[ETYPE.FLOAT] = 'int(11)';
+typeTable[ETYPE.BOOL] = 'tinyint(4) NOT NULL';
+typeTable[ETYPE.DOUBLE] = 'double NOT NULL';
+typeTable[ETYPE.FLOAT] = 'float';
 typeTable[ETYPE.INT] = 'int(11) NOT NULL';
-typeTable[ETYPE.INT64] = 'bigint(11) NOT NULL';
+typeTable[ETYPE.INT64] = 'bigint(20) NOT NULL';
 typeTable[ETYPE.STRING] = 'varchar(64) NOT NULL';
 typeTable[ETYPE.OBJECT] = 'text NOT NULL';
 
@@ -45,13 +45,13 @@ function extendsFromDBObject(name: string, ast: AST) {
     while (true) {
         let sn = ast.findTypeStruct(name, OUTTAG.server);
         if (!sn || !sn.base) return false;
-        if (sn.base == 'DBObject') return true;
+        if (sn.base == 'DBBase') return true;
         name = sn.base;
     }
 }
 
 function generate(sn: StructNode, ast: AST) {
-    let members = getAllMembers(sn.name, ast);
+    let [members,index] = getAllMembers(sn.name, ast);
     let data: any = {};
     let mems: any[] = [];
     for (let vn of members) {
@@ -64,12 +64,14 @@ function generate(sn: StructNode, ast: AST) {
     data.name = sn.name;
     data.comment = parseTableComment(sn.comment);
     data.mems = mems;
+    data.index = index;
     return data;
 }
 
 function getAllMembers(name: string, ast: AST) {
     let members: VarNode[] = [];
     let chains: StructNode[] = [];
+    let index = '';
     while (true) {
         if (!name) break;
         let sn = ast.findTypeStruct(name, OUTTAG.server);
@@ -80,8 +82,9 @@ function getAllMembers(name: string, ast: AST) {
     for (let i = chains.length - 1; i >= 0; i--) {
         let sn = chains[i];
         members = members.concat(sn.members);
+        if(index == '' && sn.dbindex) index = sn.dbindex;
     }
-    return members;
+    return [members,index];
 }
 
 function parseTableComment(comment: string | null) {

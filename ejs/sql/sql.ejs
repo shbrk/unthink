@@ -17,10 +17,12 @@ USE `<%-dbname%>`;
 
 DROP TABLE IF EXISTS `<%-node.name%>`;
 CREATE TABLE IF NOT EXISTS `<%-node.name%>` (
-  <%_ for(let item of node.mems) {_%>
+  <%_ for(let [idx,item] of node.mems.entries()) {_%>
+  <%_ if(idx == node.mems.length - 1 && node.index == "") {_%>
+  `<%-item.name%>` <%-item.type%><%-item.comment%>
+  <%_} else {_%>
   `<%-item.name%>` <%-item.type%><%-item.comment%>,
-  <%_}%>  PRIMARY KEY (`uuid`)
-  KEY `USRID` (`usrid`)
+  <%_}%><%_}%>  <%-node.index%>  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8<%-node.comment%>;
 
 <%_}%>

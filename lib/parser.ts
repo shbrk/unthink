@@ -59,6 +59,7 @@ export default class Parser {
             sn.comment = json.getComment(structName, structJsonList);
             sn.members = new Array<VarNode>();
             sn.nodb = types.getNODBTag(structData);
+            sn.dbindex = types.getDBIndex(structData);
 
             for (const structMemName in structData) {
                 if (json.isComment(structMemName)) continue;
