@@ -20,6 +20,7 @@ export function midProcess(ast: AST, resPath: string) {
     versionFilePath = path.join(resPath, versionFilePath);
     setEnumVarValue(ast);
     addVersionEnum(ast);
+    addDBObjectEnum(ast);
 }
 
 function setEnumVarValue(ast: AST) {
@@ -63,8 +64,37 @@ function addVersionEnum(ast: AST) {
     vn.name = "versionName";
     vn.comment = '协议版本号字符表示';
     vn.type = ETYPE.STRING;
-    vn.value = `'${verobj.versionName}'`;
+    vn.value = `"${verobj.versionName}"`;
     en.members.push(vn);
+    ast.enumMapCommon.set(en.name, en);
+}
+
+function extendsFromDBObject(name: string, ast: AST) {
+    while (true) {
+        let sn = ast.findTypeStruct(name, OUTTAG.server);
+        if (!sn || !sn.base) return false;
+        if (sn.base == 'DBBase') return true;
+        name = sn.base;
+    }
+}
+
+function addDBObjectEnum(ast: AST) {
+    const map = ast.getStructMap(OUTTAG.server);
+    let en = new EnumNode();
+    en.comment = "工具自动生成的枚举，枚举所有的存库对象";
+    en.ismix = true;
+    en.name = "DBOType";
+    en.members = [];
+    for (let [name, sn] of map.entries()) {
+        if (extendsFromDBObject(name, ast) && !sn.nodb) {
+            const vn = new VarNode();
+            vn.name = name;
+            vn.comment = sn.comment;
+            vn.type = ETYPE.STRING;
+            vn.value = `"${name}"`;
+            en.members.push(vn);
+        }
+    }
     ast.enumMapCommon.set(en.name, en);
 }
 
