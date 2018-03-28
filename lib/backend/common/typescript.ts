@@ -33,10 +33,10 @@ export default class TypeScriptOutput extends BaseOutput {
             let tmp = ([t] as string[]).concat(subt);
             let item = tmp[tmp.length - 1];
 
-            if (this.ast.findTypeEnum(item)) {
+            if (this.ast.findTypeEnum(item,OUTTAG.server)) {
                 item = ft == FILETAG.Enum ? item : `SE.${item}`;
             }
-            else if (this.ast.findTypeStruct(item)) {
+            else if (this.ast.findTypeStruct(item,OUTTAG.server)) {
                 item = ft == FILETAG.Struct ? item : `SS.${item}`;
             }
             else if (typeTable[item]) {
@@ -75,10 +75,10 @@ export default class TypeScriptOutput extends BaseOutput {
         let val = vn.value;
         if (val == null) val = this.getDefaultVal(vn.type);
 
-        if (this.ast.findTypeEnum(vn.type)) {
+        if (this.ast.findTypeEnum(vn.type,OUTTAG.server)) {
             t = ft == FILETAG.Enum ? t : `SE.${t}`;
         }
-        else if (this.ast.findTypeStruct(vn.type)) {
+        else if (this.ast.findTypeStruct(vn.type,OUTTAG.server)) {
             t = ft == FILETAG.Struct ? `${t} | null` : `SS.${t} | null`;
         }
         else if (vn.type == ETYPE.OBJECT || vn.type == ETYPE.ARRAY) {
