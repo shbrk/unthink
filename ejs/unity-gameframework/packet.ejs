@@ -18,7 +18,7 @@ namespace <%-namespace%>.<%-fn%>
     /// <%-node.req.comment%>
     /// </summary>
     <%_}_%>
-    [RequestMessage(URL = "<%-node.mod%>/<%-node.name%>")]
+    [RequestMsg(URL = "<%-node.mod%>/<%-node.name%>")]
     public class <%-node.upperName%>Request
     {
         <%_ for(let v of node.req.args) {_%>

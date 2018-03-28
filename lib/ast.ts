@@ -98,7 +98,7 @@ export default class AST {
             return this.enumMapClientOnly.get(t) || this.enumMapCommon.get(t);
         }
         else if (tag == OUTTAG.server) {
-            return this.enumMapClientOnly.get(t) || this.enumMapCommon.get(t);
+            return this.enumMapServerOnly.get(t) || this.enumMapCommon.get(t);
         }
         else {
             return this.enumMapCommon.get(t);
@@ -110,7 +110,7 @@ export default class AST {
             return this.structMapClientOnly.get(t) || this.structMapCommon.get(t);
         }
         else if (tag == OUTTAG.server) {
-            return this.structMapClientOnly.get(t) || this.structMapCommon.get(t);
+            return this.structMapServerOnly.get(t) || this.structMapCommon.get(t);
         }
         else {
             return this.structMapCommon.get(t);
