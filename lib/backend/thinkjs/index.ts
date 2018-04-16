@@ -25,7 +25,7 @@ export default function (ast: AST, conf: any, ejsPath: string) {
     try { controllerOutput(ast, outPath, ejsPath); } catch (e) { console.log(e); };
 }
 
-function checkImport(sf: SourceFile, mod: string, specifier: string = '../protocol/api', isDefaultExport = false) {
+function checkImport(sf: SourceFile, mod: string, specifier: string = '../protocol/API', isDefaultExport = false) {
     let importd = sf.getImport(importDeclaration => { return importDeclaration.getModuleSpecifier() == specifier; });
     if (!importd) { importd = sf.addImportDeclaration({ moduleSpecifier: specifier }); }
     if (!isDefaultExport) {
