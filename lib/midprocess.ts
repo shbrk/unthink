@@ -122,9 +122,9 @@ function getExtendsDBName(name: string, ast: AST) {
 function addDBObjectSharedEnum(ast: AST) {
     const map = ast.getStructMap(OUTTAG.server);
     let en = new EnumNode();
-    en.comment = "工具自动生成的枚举，枚举所有的存库对象";
+    en.comment = "工具自动生成的枚举，枚举所有的存库对象的元信息";
     en.ismix = true;
-    en.name = "DBOShard";
+    en.name = "DBOShared";
     en.members = [];
     for (let [name, sn] of map.entries()) {
         if (extendsFromDBObject(name, ast) && !sn.nodb) {

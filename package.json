@@ -1,6 +1,6 @@
 {
   "name": "unthink",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "a protocol generator for thinkjs and unity",
   "main": "bin/unthink",
   "scripts": {
