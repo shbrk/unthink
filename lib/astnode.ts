@@ -29,6 +29,7 @@ export class StructNode {
     base: string;
     nodb:boolean;
     dbindex:string;
+    dbname: string;
 };
 
 

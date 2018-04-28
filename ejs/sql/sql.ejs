@@ -3,10 +3,10 @@
 
 
 --
--- Database: `gamedb`
+-- Database: `<%-dbname%>`
 --
-CREATE DATABASE IF NOT EXISTS `<%-dbname%>` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `<%-dbname%>`;
+CREATE DATABASE IF NOT EXISTS `<%-fulldbname%>` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `<%-fulldbname%>`;
 
 -- --------------------------------------------------------
 
@@ -15,8 +15,8 @@ USE `<%-dbname%>`;
 -- 表的结构 `<%-node.name%>`
 --
 
-DROP TABLE IF EXISTS `<%-node.name%>`;
-CREATE TABLE IF NOT EXISTS `<%-node.name%>` (
+DROP TABLE IF EXISTS `<%-`${tablePrefix}${node.name}`%>`;
+CREATE TABLE IF NOT EXISTS `<%-`${tablePrefix}${node.name}`%>` (
   <%_ for(let [idx,item] of node.mems.entries()) {_%>
   <%_ if(idx == node.mems.length - 1 && node.index == "") {_%>
   `<%-item.name%>` <%-item.type%><%-item.comment%>
@@ -26,3 +26,22 @@ CREATE TABLE IF NOT EXISTS `<%-node.name%>` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8<%-node.comment%>;
 
 <%_}%>
+
+<%_ if (sharding) {%>
+--
+-- 分库分表
+--
+<%_ for (let i = 0; i < dbShardingCount; ++i) {%>
+CREATE DATABASE IF NOT EXISTS `<%-`${fulldbname}_${i}`%>` default charset utf8 COLLATE utf8_general_ci;
+USE `<%-`${fulldbname}_${i}`%>`;
+  <%_for (let node of mems) {_%>
+    <%_for (let j = 0; j < tableShardingCount; ++j) {_%>
+CREATE TABLE IF NOT EXISTS `<%-`${tablePrefix}${node.name}_${j}`%>` like `<%-fulldbname%>`.`<%-`${tablePrefix}${node.name}`%>`;
+    <%_}_%>
+  <%_}_%>
+<%_}%>
+--
+-- 删除临时库
+--
+DROP DATABASE `<%-fulldbname%>`;
+<%_ }_%>

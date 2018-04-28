@@ -25,20 +25,31 @@ typeTable[ETYPE.OBJECT] = 'text NOT NULL';
 export default function (ast: AST, conf: any, ejsPath: string) {
     let outPath = typeof conf == 'string' ? conf : conf.path;
     ejsPath = path.join(ejsPath, 'sql');
-    let dbname = conf.dbname || "gamedb";
 
     const map = ast.getStructMap(OUTTAG.server);
-    const data: any = {};
-    const mems: any[] = [];
+    const dbs: { [key: string]: any[] } = {};
     for (let sn of map.values()) {
         if (!sn.nodb && extendsFromDBObject(sn.name, ast)) {
-            mems.push(generate(sn, ast));
+            const target = generate(sn, ast);
+            if (!dbs[target.databaseSetting.databaseName]) {
+                dbs[target.databaseSetting.databaseName] = [];
+            }
+            dbs[target.databaseSetting.databaseName].push(target);
         }
     }
-    data.mems = mems;
-    data.dbname = dbname;
-    data.time = getNowStr();
-    render(`${dbname}.sql`, 'sql.ejs', data, ejsPath, outPath);
+    for (let name in dbs) {
+        const data: any = {};
+        data.mems = dbs[name];
+        data.dbPrefix = conf.dbPrefix || '';
+        data.tablePrefix = conf.tablePrefix || '';
+        data.fulldbname = `${data.dbPrefix}${name}`;
+        data.dbname = name;
+        data.dbShardingCount = conf.dbShardingCount || 1;
+        data.tableShardingCount = conf.tableShardingCount || 1;
+        data.sharding = data.mems.length > 0 ? data.mems[0].databaseSetting.sharding : false;
+        data.time = getNowStr();
+        render(`${data.fulldbname}_auto_generate.sql`, 'sql.ejs', data, ejsPath, outPath);
+    }
 }
 
 function extendsFromDBObject(name: string, ast: AST) {
@@ -46,6 +57,25 @@ function extendsFromDBObject(name: string, ast: AST) {
         let sn = ast.findTypeStruct(name, OUTTAG.server);
         if (!sn || !sn.base) return false;
         if (sn.base == 'DBBase') return true;
+        name = sn.base;
+    }
+}
+
+function extendsFromShardDBObject(name: string, ast: AST) {
+    while (true) {
+        let sn = ast.findTypeStruct(name, OUTTAG.server);
+        if (!sn || !sn.base) return false;
+        if (sn.base == 'ShardDBObject') return true;
+        name = sn.base;
+    }
+}
+
+
+function getExtendsDBName(name: string, ast: AST) {
+    while (true) {
+        let sn = ast.findTypeStruct(name, OUTTAG.server);
+        if (!sn || !sn.base) return undefined;
+        if(sn.dbname) return sn.dbname;
         name = sn.base;
     }
 }
@@ -65,6 +95,10 @@ function generate(sn: StructNode, ast: AST) {
     data.comment = parseTableComment(sn.comment);
     data.mems = mems;
     data.index = index;
+    data.databaseSetting = {};
+    data.databaseSetting.databaseName = sn.dbname || getExtendsDBName(sn.name,ast);
+    data.databaseSetting.tableName = sn.name;
+    data.databaseSetting.sharding = extendsFromShardDBObject(sn.name, ast);
     return data;
 }
 

@@ -27,7 +27,8 @@ export enum KEYWORD {
     EXTENDS = "<extends>",
     DBINDEX = "<dbindex>",
     REQ = "<req>",
-    RES = "<res>"
+    RES = "<res>",
+    DBNAME = "<dbname>"
 }
 
 
@@ -160,4 +161,8 @@ export function getResOrThrow(obj: any, mod: string, name: string, throwable: bo
         return obj[KEYWORD.RES];
     if (!throwable) return null;
     throw new Error(`${mod}.${name} api need a res define`);
+}
+
+export function getDBName(val: any) {
+    return val[KEYWORD.DBNAME];
 }

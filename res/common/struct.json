@@ -1,27 +1,30 @@
 {
     "DBBase": { // 所有入库对象应该继承此类 
     },
-    "DBObject": { // 所有玩家个人数据应该继承此类。
+    "DBObject": { // 普通数据对象基类
         "<extends>": "DBBase",
         "<nodb>": true,
-        "<dbindex>": "PRIMARY KEY (`uuid`),KEY `USRID` (`usrid`)",
-        "uuid": "string",
-        "usrid": "int64"
-    },
-    "DBGlobalObject": { // 所有全局数据应该继承此类（例如公会）。
-        "<extends>": "DBBase",
-        "<nodb>": true,
+        "<dbname>": "globaldb",
         "<dbindex>": "PRIMARY KEY (`uuid`)",
         "uuid": "string"
     },
+    "ShardDBObject": { // 分库分表数据对象基类
+        "<extends>": "DBBase",
+        "<nodb>": true,
+		"<dbname>": "gamedb",
+        "<dbindex>": "PRIMARY KEY (`uuid`),KEY `ENTITYID` (`entityId`)",
+        "uuid": "string",
+        "entityId": "int64"
+    },
+
     "Item": { // 玩家物品的结构
-        "<extends>": "DBObject",
+        "<extends>": "ShardDBObject",
         "cid":"int",//对应的策划表id
         "count":"int", // 物品的数量
         "state":"EItemState" // 对应物品的状态。 
     },
     "Task": {
-        "<extends>": "DBObject",
+        "<extends>": "ShardDBObject",
         "cid":"int",
         "phase":"int" // 或者定义一个对应枚举
     }

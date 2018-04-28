@@ -9,7 +9,10 @@
         "json-schema": "./out/thinkjs/public/schema", /*json-schema目录*/
         "sql": {
             "path": "./out/thinkjs/public/sql/",
-            "dbname": "gamedb"
+            "dbPrefix": "", /* database name prefix */
+            "tablePrefix": "", /* table name prefix */
+            "dbShardingCount": 1, /*数据库分片数量*/
+            "tableShardingCount": 1 /*数据表分片数量*/
         }
     },
     "request_required": true, /*是否坚持每个api声明了request*/
