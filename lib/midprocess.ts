@@ -21,6 +21,7 @@ export function midProcess(ast: AST, resPath: string) {
     setEnumVarValue(ast);
     addVersionEnum(ast);
     addDBObjectEnum(ast);
+    addDBObjectSharedEnum(ast);
 }
 
 function setEnumVarValue(ast: AST) {
@@ -78,6 +79,16 @@ function extendsFromDBObject(name: string, ast: AST) {
     }
 }
 
+function extendsFromSharedDBObject(name: string, ast: AST) {
+    while (true) {
+        let sn = ast.findTypeStruct(name, OUTTAG.server);
+        if (!sn || !sn.base) return false;
+        if (sn.base == 'ShardDBObject') return true;
+        name = sn.base;
+    }
+}
+
+
 function addDBObjectEnum(ast: AST) {
     const map = ast.getStructMap(OUTTAG.server);
     let en = new EnumNode();
@@ -97,6 +108,40 @@ function addDBObjectEnum(ast: AST) {
     }
     ast.enumMapCommon.set(en.name, en);
 }
+
+function getExtendsDBName(name: string, ast: AST) {
+    while (true) {
+        let sn = ast.findTypeStruct(name, OUTTAG.server);
+        if (!sn) return undefined;
+        if(sn.dbname) return sn.dbname;
+        if(!sn.base) return undefined;
+        name = sn.base;
+    }
+}
+
+function addDBObjectSharedEnum(ast: AST) {
+    const map = ast.getStructMap(OUTTAG.server);
+    let en = new EnumNode();
+    en.comment = "工具自动生成的枚举，枚举所有的存库对象";
+    en.ismix = true;
+    en.name = "DBOShard";
+    en.members = [];
+    for (let [name, sn] of map.entries()) {
+        if (extendsFromDBObject(name, ast) && !sn.nodb) {
+            const vn = new VarNode();
+            const dbname = getExtendsDBName(name,ast);
+            const shared = extendsFromSharedDBObject(name,ast);
+            vn.name = name;
+            vn.comment = sn.comment;
+            vn.type = ETYPE.STRING;
+            vn.value = `{ dbname: '${dbname}',tbname: '${name}',shared: ${shared} }`;
+            en.members.push(vn);
+        }
+    }
+    ast.enumMapServerOnly.set(en.name, en);
+}
+
+
 
 function makeMD5(ast: AST) {
     const md5 = crypto.createHash('md5');

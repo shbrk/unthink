@@ -74,8 +74,9 @@ function extendsFromShardDBObject(name: string, ast: AST) {
 function getExtendsDBName(name: string, ast: AST) {
     while (true) {
         let sn = ast.findTypeStruct(name, OUTTAG.server);
-        if (!sn || !sn.base) return undefined;
+        if (!sn) return undefined;
         if(sn.dbname) return sn.dbname;
+        if(!sn.base) return undefined;
         name = sn.base;
     }
 }

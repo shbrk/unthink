@@ -3,28 +3,9 @@
  *  PLEASE DO NOT REWRITE.
  */
 
-import 'reflect-metadata';
 import * as SE from "./SharedEnum";
 
-
-/**
- * 数据库设置
- * @param databaseName 数据库名(配置名称)
- * @param tableName 表名
- * @param sharding 是否分片, 默认不分片
- */
-function DatabaseSetting(databaseName: string, tableName: string, sharding: boolean = false) {
-    const setting = {
-        databaseName: databaseName,
-        tableName: tableName,
-        sharding: sharding
-    }
-    return Reflect.metadata(DatabaseSetting.name, setting);
-}
-
 <%_ for(let node of structs) {_%>
-<%_ if(node.databaseSetting) {_%>
-@DatabaseSetting("<%-node.databaseSetting.databaseName%>", "<%-node.databaseSetting.tableName%>", <%-node.databaseSetting.sharding%>)<%_ }%>
 export class <%-node.name%><%-node.base%> { <%-node.comment%>
   <%_ for(let v of node.mems) {_%>
     <%-v.name%>: <%-v.type%> = <%-v.value%>; <%-v.comment%>

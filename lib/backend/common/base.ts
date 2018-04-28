@@ -83,12 +83,6 @@ export default class BaseOutput {
             node.comment = this.parseComment(sn.comment);
             node.mems = [];
             node.base = this.parseExtends(sn.base);
-            if (!sn.nodb && this.extendsFromDBObject(sn.name)) {
-                node.databaseSetting = {};
-                node.databaseSetting.databaseName = sn.dbname;
-                node.databaseSetting.tableName = sn.name;
-                node.databaseSetting.sharding = this.extendsFromShardDBObject(sn.name);
-            }
             for (let vn of sn.members) {
                 let [t, val] = this.parseVar(vn, FILETAG.Struct);
                 let v: any = {};
@@ -169,22 +163,5 @@ export default class BaseOutput {
         let data = this.parseAPIData(map)
         data.time = getTimeString(new Date());
         this.render(fileName, ejsName, data);
-    }
-
-    extendsFrom(name: string, parents: string[]) {
-        while (true) {
-            let sn = this.ast.findTypeStruct(name, OUTTAG.server);
-            if (!sn || !sn.base) return false;
-            if (parents.indexOf(sn.base) !== -1) return true;
-            name = sn.base;
-        }
-    }
-
-    extendsFromDBObject(name: string) {
-        return this.extendsFrom(name, ["DBBase", "DBObject", "ShardDBObject"]);
-    }
-
-    extendsFromShardDBObject(name: string) {
-        return this.extendsFrom(name, ["ShardDBObject"]);
     }
 }
