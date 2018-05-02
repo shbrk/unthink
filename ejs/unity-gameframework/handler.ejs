@@ -5,9 +5,6 @@
 //
 // ----------------------------------------
 
-using UnityGameFramework.Runtime;
-using GameFramework.Net;
-using <%-namespace%>;
 
 namespace <%-namespace%>.<%-fn%>
 {
@@ -21,10 +18,10 @@ namespace <%-namespace%>.<%-fn%>
     {
         public override void Handle(object sender, ResponseEventArgs response)
         {
-            ResponseMessage<<%-node.upperName%>Response> msg = response.GetData<ResponseMessage<<%-node.upperName%>Response>>();
-            EventComponent eventComponent = SZUnityFramework.GameEntry.Event;
-            CommonEventArgs<<%-node.upperName%>Response> arg = new CommonEventArgs<<%-node.upperName%>Response>(msg.errno,msg.errmsg,msg.data);
-            eventComponent.Fire(CommonEventArgs<<%-node.upperName%>Response>.EventId, arg);
+            var msg = response.GetData<ResponseMessage<OOBResponse<<%-node.upperName%>Response>>>();
+            var arg = new CommonEventArgs<<%-node.upperName%>Response>(msg.errno,msg.errmsg,msg.data.data);
+            msg.data.HandleOOB();
+            SZUnityFramework.GameEntry.Event.Fire(CommonEventArgs<<%-node.upperName%>Response>.EventId, arg);
         }   
     }
 }
