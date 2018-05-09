@@ -15,6 +15,7 @@ const config = requireJsonNoComment(path.join(resPath, 'config.json'));
 config.out = config.out || [];
 config.request_required = config.request_required || false;
 config.response_required = config.response_required || false;
+config.output_ver = config.output_ver || false;
 
 
 function createAST(config: any) {
@@ -36,8 +37,8 @@ function createAST(config: any) {
     return ast;
 }
 
-function supplement(ast: AST) {
-    midProcess(ast,resPath);
+function supplement(ast: AST,conifg:any) {
+    midProcess(ast,resPath,config.output_ver);
 }
 
 function output(ast: AST, list: any) {
@@ -49,7 +50,7 @@ function output(ast: AST, list: any) {
 
 console.log('');
 let ast = createAST(config);
-supplement(ast);
+supplement(ast,config);
 output(ast, config.out);
 console.log('');
 console.log('done!');

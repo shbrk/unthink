@@ -15,6 +15,7 @@
             "tableShardingCount": 1 /*数据表分片数量*/
         }
     },
+    "output_ver":true, /*是否导出一个协议版本号*/
     "request_required": true, /*是否坚持每个api声明了request*/
     "response_required": true  /*是否坚持每个api声明了response*/
 }

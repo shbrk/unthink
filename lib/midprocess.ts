@@ -16,10 +16,10 @@ class VerObj {
     versionMD5: string = '';
 }
 
-export function midProcess(ast: AST, resPath: string) {
+export function midProcess(ast: AST, resPath: string, output_ver: boolean) {
     versionFilePath = path.join(resPath, versionFilePath);
     setEnumVarValue(ast);
-    addVersionEnum(ast);
+    if (output_ver) addVersionEnum(ast);
     addDBObjectEnum(ast);
     addDBObjectSharedEnum(ast);
 }
@@ -113,8 +113,8 @@ function getExtendsDBName(name: string, ast: AST) {
     while (true) {
         let sn = ast.findTypeStruct(name, OUTTAG.server);
         if (!sn) return undefined;
-        if(sn.dbname) return sn.dbname;
-        if(!sn.base) return undefined;
+        if (sn.dbname) return sn.dbname;
+        if (!sn.base) return undefined;
         name = sn.base;
     }
 }
@@ -129,8 +129,8 @@ function addDBObjectSharedEnum(ast: AST) {
     for (let [name, sn] of map.entries()) {
         if (extendsFromDBObject(name, ast) && !sn.nodb) {
             const vn = new VarNode();
-            const dbname = getExtendsDBName(name,ast);
-            const shared = extendsFromSharedDBObject(name,ast);
+            const dbname = getExtendsDBName(name, ast);
+            const shared = extendsFromSharedDBObject(name, ast);
             vn.name = name;
             vn.comment = sn.comment;
             vn.type = ETYPE.STRING;
