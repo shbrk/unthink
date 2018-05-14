@@ -80,11 +80,19 @@ export default class GFW extends CSharpOutput {
     doOutput(enumOut = true, structOut = true, apiOut = true) {
         if (enumOut) {
             let enumMap = this.ast.getEnumMap(OUTTAG.client);
-            this.enumOutput(enumMap, 'Protocol/SharedEnum.cs', 'enum.ejs');
+            for (let [k, v] of enumMap.entries()) {
+                let map = new Map<string, EnumNode>();
+                map.set(k, v);
+                this.enumOutput(map, `Protocol/Enum/${k}.cs`, 'enum.ejs');
+            }
         }
         if (structOut) {
             let structMap = this.ast.getStructMap(OUTTAG.client);
-            this.structOutput(structMap, 'Protocol/SharedStruct.cs', 'struct.ejs');
+            for (let [k, v] of structMap.entries()) {
+                let map = new Map<string, StructNode>();
+                map.set(k, v);
+                this.structOutput(map, `Protocol/Struct/${k}.cs`, 'struct.ejs');
+            }
         }
         if (apiOut) {
             let apiMap = this.ast.getAPIMap(OUTTAG.client);
