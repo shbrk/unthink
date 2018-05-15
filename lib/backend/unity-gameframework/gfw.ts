@@ -33,7 +33,7 @@ export default class GFW extends CSharpOutput {
         let apis = data.apis;
         this.outputPacket(apis, 'Packet', 'packet.ejs');
         this.outputPacketHandler(apis, 'PacketHandler', 'handler.ejs');
-        this.outputEvent('Event', 'event.ejs');
+     //   this.outputEvent('Event', 'event.ejs');
     }
 
 
