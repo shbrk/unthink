@@ -33,7 +33,7 @@ export default class GFW extends CSharpOutput {
         let apis = data.apis;
         this.outputPacket(apis, 'Packet', 'packet.ejs');
         this.outputPacketHandler(apis, 'PacketHandler', 'handler.ejs');
-     //   this.outputEvent('Event', 'event.ejs');
+        //   this.outputEvent('Event', 'event.ejs');
     }
 
 
@@ -83,20 +83,29 @@ export default class GFW extends CSharpOutput {
             for (let [k, v] of enumMap.entries()) {
                 let map = new Map<string, EnumNode>();
                 map.set(k, v);
-                this.enumOutput(map, `Protocol/Enum/${k}.cs`, 'enum.ejs');
+                if (k == 'DBOType') // 特殊处理一下
+                {
+                    if (v.members.length > 0) {
+                        const name = v.members[0].name;
+                        this.enumOutput(map, `Protocol/Enum/${k}.${name}.cs`, 'enum_partial.ejs');
+                    }
+                }
+                else {
+                    this.enumOutput(map, `Protocol/Enum/${k}.cs`, 'enum.ejs');
+                }
             }
-        }
-        if (structOut) {
-            let structMap = this.ast.getStructMap(OUTTAG.client);
-            for (let [k, v] of structMap.entries()) {
-                let map = new Map<string, StructNode>();
-                map.set(k, v);
-                this.structOutput(map, `Protocol/Struct/${k}.cs`, 'struct.ejs');
+            if (structOut) {
+                let structMap = this.ast.getStructMap(OUTTAG.client);
+                for (let [k, v] of structMap.entries()) {
+                    let map = new Map<string, StructNode>();
+                    map.set(k, v);
+                    this.structOutput(map, `Protocol/Struct/${k}.cs`, 'struct.ejs');
+                }
             }
-        }
-        if (apiOut) {
-            let apiMap = this.ast.getAPIMap(OUTTAG.client);
-            this.apiOutput(apiMap, '', '');
+            if (apiOut) {
+                let apiMap = this.ast.getAPIMap(OUTTAG.client);
+                this.apiOutput(apiMap, '', '');
+            }
         }
     }
 }
