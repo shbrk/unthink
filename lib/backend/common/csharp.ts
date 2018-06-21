@@ -140,15 +140,15 @@ export default class CSharpOutput extends BaseOutput {
 
     doOutput(enumOut = true, structOut = true, apiOut = true) {
         if (enumOut) {
-            let enumMap = this.ast.getEnumMap(OUTTAG.client);
+            let enumMap = this.ast.getEnumMap(this.tag);
             this.enumOutput(enumMap, 'SharedEnum.cs', 'enum.ejs');
         }
         if (structOut) {
-            let structMap = this.ast.getStructMap(OUTTAG.client);
+            let structMap = this.ast.getStructMap(this.tag);
             this.structOutput(structMap, 'SharedStruct.cs', 'struct.ejs');
         }
         if (apiOut) {
-            let apiMap = this.ast.getAPIMap(OUTTAG.client);
+            let apiMap = this.ast.getAPIMap(this.tag);
             this.apiOutput(apiMap, 'API.cs', 'api.ejs');
         }
     }

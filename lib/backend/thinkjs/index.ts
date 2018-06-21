@@ -19,7 +19,7 @@ export default function (ast: AST, conf: any, ejsPath: string) {
     ejsPath = path.join(ejsPath, 'typescript');
     let tsOutPath = path.join(outPath, 'protocol');
     try2mkdir(tsOutPath);
-    let ts = new TypeScriptOutput(ast, tsOutPath, ejsPath);
+    let ts = new TypeScriptOutput(ast, tsOutPath, ejsPath,OUTTAG.server);
     ts.doOutput();
 
     try { controllerOutput(ast, outPath, ejsPath); } catch (e) { console.log(e); };

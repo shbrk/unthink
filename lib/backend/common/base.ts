@@ -9,11 +9,13 @@ export default class BaseOutput {
     outPath: string;
     ejsPath: string;
     ast: AST;
+    tag:OUTTAG;
 
-    constructor(ast: AST, outPath: string, ejsPath: string) {
+    constructor(ast: AST, outPath: string, ejsPath: string,tag:OUTTAG) {
         this.outPath = outPath;
         this.ejsPath = ejsPath;
         this.ast = ast;
+        this.tag = tag;
     }
 
     doOutput(enumOut = true, structOut = true, apiOut = true) {

@@ -117,7 +117,7 @@ function getAllMembers(name: string, ast: AST) {
     for (let i = chains.length - 1; i >= 0; i--) {
         let sn = chains[i];
         members = members.concat(sn.members);
-        if (index == '' && sn.dbindex) index = sn.dbindex;
+        if (sn.dbindex) index = sn.dbindex;
     }
     return { members, index };
 }

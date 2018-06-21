@@ -2,7 +2,7 @@ import AST from "../../ast";
 import BaseOutput from "./base";
 import { ETYPE } from "../../types";
 import { format } from "util";
-import { VarNode, OUTTAG, FILETAG } from "../../astnode";
+import { VarNode, FILETAG } from "../../astnode";
 
 let typeTable: any = {};
 typeTable[ETYPE.ARRAY] = 'Array<%s>';
@@ -33,10 +33,10 @@ export default class TypeScriptOutput extends BaseOutput {
             let tmp = ([t] as string[]).concat(subt);
             let item = tmp[tmp.length - 1];
 
-            if (this.ast.findTypeEnum(item,OUTTAG.server)) {
+            if (this.ast.findTypeEnum(item,this.tag)) {
                 item = ft == FILETAG.Enum ? item : `SE.${item}`;
             }
-            else if (this.ast.findTypeStruct(item,OUTTAG.server)) {
+            else if (this.ast.findTypeStruct(item,this.tag)) {
                 item = ft == FILETAG.Struct ? item : `SS.${item}`;
             }
             else if (typeTable[item]) {
@@ -75,10 +75,10 @@ export default class TypeScriptOutput extends BaseOutput {
         let val = vn.value;
         if (val == null) val = this.getDefaultVal(vn.type);
 
-        if (this.ast.findTypeEnum(vn.type,OUTTAG.server)) {
+        if (this.ast.findTypeEnum(vn.type,this.tag)) {
             t = ft == FILETAG.Enum ? t : `SE.${t}`;
         }
-        else if (this.ast.findTypeStruct(vn.type,OUTTAG.server)) {
+        else if (this.ast.findTypeStruct(vn.type,this.tag)) {
             t = ft == FILETAG.Struct ? `${t} | null` : `SS.${t} | null`;
         }
         else if (vn.type == ETYPE.OBJECT || vn.type == ETYPE.ARRAY) {
@@ -90,15 +90,15 @@ export default class TypeScriptOutput extends BaseOutput {
 
     doOutput(enumOut = true, structOut = true, apiOut = true) {
         if (enumOut) {
-            let enumMap = this.ast.getEnumMap(OUTTAG.server);
+            let enumMap = this.ast.getEnumMap(this.tag);
             this.enumOutput(enumMap, 'SharedEnum.ts', 'enum.ejs');
         }
         if (structOut) {
-            let structMap = this.ast.getStructMap(OUTTAG.server);
+            let structMap = this.ast.getStructMap(this.tag);
             this.structOutput(structMap, 'SharedStruct.ts', 'struct.ejs');
         }
         if (apiOut) {
-            let apiMap = this.ast.getAPIMap(OUTTAG.server);
+            let apiMap = this.ast.getAPIMap(this.tag);
             this.apiOutput(apiMap, 'API.ts', 'api.ejs');
         }
     }

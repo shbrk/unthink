@@ -1,6 +1,7 @@
 {
     "out": { /* 需要输出的文件种类，对应backend的种类*/
         "unity": "./out/unity", /*unity工程Scripts目录*/
+        "laya":"./out/laya",/*laya工程目录*/
         "unity-gameframework": { /*使用gameframework工程的Scripts目录*/
             "path": "./out/unity-gfw/Assets/Scripts", /*unity工程Script目录*/
             "namespace": "StarForce"

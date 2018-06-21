@@ -11,7 +11,7 @@ export default class GFW extends CSharpOutput {
     namespaceStr: string;
 
     constructor(ast: AST, outPath: string, ejsPath: string, namespaceStr: string) {
-        super(ast, outPath, ejsPath);
+        super(ast, outPath, ejsPath,OUTTAG.client);
         this.namespaceStr = namespaceStr;
     }
 

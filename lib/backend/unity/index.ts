@@ -10,12 +10,13 @@ import * as path from 'path';
 import * as fs from 'fs';
 import CSharpOutput from "../common/csharp";
 import { try2mkdir, render } from "../../helper";
+import { OUTTAG } from "../../astnode";
 
 export default function (ast: AST, conf: any, ejsPath: string) {
     let outPath = typeof conf == 'string' ? conf : conf.path;
     outPath = path.join(outPath, 'Protocol');
     ejsPath = path.join(ejsPath, 'csharp');
-    let cs = new CSharpOutput(ast, outPath, ejsPath);
+    let cs = new CSharpOutput(ast, outPath, ejsPath,OUTTAG.client);
     cs.doOutput();
 
     let outName = 'ServerContext.cs';
