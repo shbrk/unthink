@@ -14,7 +14,7 @@ import { OUTTAG } from "../../astnode";
 export default function (ast: AST, conf: any, ejsPath: string) {
     let outPath = typeof conf == 'string' ? conf : conf.path;
     outPath = path.join(outPath, 'src');
-    ejsPath = path.join(ejsPath, 'typescript');
+    ejsPath = path.join(ejsPath, 'laya');
     let tsOutPath = path.join(outPath, 'protocol');
     try2mkdir(tsOutPath);
     let ts = new TypeScriptOutput(ast, tsOutPath, ejsPath,OUTTAG.client);

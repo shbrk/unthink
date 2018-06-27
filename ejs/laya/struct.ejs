@@ -1,0 +1,16 @@
+/**
+ *  MADE BY GENERATOR AT <%-time%>,
+ *  PLEASE DO NOT REWRITE.
+ */
+
+ namespace Proto.SS {
+
+    <%_ for(let node of structs) {_%>
+    export class <%-node.name%><%-node.base%> { <%-node.comment%>
+      <%_ for(let v of node.mems) {_%>
+        <%-v.name%>: <%-v.type%> = <%-v.value%>; <%-v.comment%>
+      <%_}_%>
+    }
+
+    <%_}%>}
+
