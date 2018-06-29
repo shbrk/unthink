@@ -3,6 +3,8 @@
  *  PLEASE DO NOT REWRITE.
  */
  
+const REQ_URL = Symbol.for('REQUEST_URL');
+
 namespace Proto.API {
 
     <%_ for (let [mod,list] of apis.entries()) { _%>
@@ -11,6 +13,7 @@ namespace Proto.API {
         <%_ for(let node of list) { _%>
         <%_ if(node.req) { _%>
         export class <%-node.name%>Request { <%-node.req.comment%> 
+            [REQ_URL]:string = '<%-mod%>/<%-node.name%>';
             <%_ for(let v of node.req.args) {_%>
             <%-v.name%>: <%-v.type%> = <%-v.value%>; <%-v.comment%>
             <%_}_%>
